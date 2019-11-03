@@ -1,3 +1,5 @@
+# TODO: The functions in this file may be unnecessary
+
 #' Build package files and import to CRAN
 #'
 #' Update DESCRIPTION, build package files for CRAN and import them.
@@ -49,5 +51,4 @@ update_cran_win <- function(cran_root, zip_file) {
     archive_windows_package(cran_root, basename_from_targz(zip_file))
 
     tools::write_PACKAGES(win_package_dir(cran_root), type = "win.binary")
-
 }

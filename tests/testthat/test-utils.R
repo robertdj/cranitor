@@ -42,8 +42,9 @@ test_that("Import packages", {
 
 
 test_that("PACKAGES metadata files are created", {
-    tools::write_PACKAGES(source_folder, type = "source")
     package_files_source <- file.path(source_folder, c("PACKAGES", "PACKAGES.gz", "PACKAGES.rds"))
+    # expect_false(fs::file_exists(package_files_source))
+    tools::write_PACKAGES(source_folder, type = "source")
     expect_true(all(fs::file_exists(package_files_source)))
 
 
