@@ -6,5 +6,4 @@
 #'
 #' @docType package
 #' @name cranitor
-#' @importFrom magrittr %>%
 "_PACKAGE"

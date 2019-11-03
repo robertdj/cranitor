@@ -12,8 +12,7 @@ Depends:
     R (>= 3.5)
 Imports:
     assertthat,
-    fs,
-    magrittr
+    fs
 Suggests:
     desc,
     devtools,

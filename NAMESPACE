@@ -2,4 +2,3 @@
 
 export(build_update_cran)
 export(update_cran)
-importFrom(magrittr,"%>%")
