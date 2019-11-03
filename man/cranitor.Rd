@@ -6,7 +6,8 @@
 \alias{cranitor-package}
 \title{\code{cranitor} package}
 \description{
-Taking care of a CRAN from initialization to updating metadata when new packages/package versions are included.
+Taking care of a CRAN from initialization to updating metadata when new packages/package versions
+are included.
 }
 \details{
 See the README on \href{https://github.com/robertdj/cranitor}{GitHub}.

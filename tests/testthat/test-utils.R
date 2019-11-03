@@ -1,6 +1,6 @@
 # Setup ---------------------------------------------------------------------------------------
 
-cran_root = file.path(tempdir(), "cran")
+cran_root <- file.path(tempdir(), "cran")
 
 # if (dir.exists(cran_root))
 #     unlink(cran_root, recursive = TRUE)
@@ -8,8 +8,8 @@ cran_root = file.path(tempdir(), "cran")
 dir.create(cran_root)
 make_local_cran(cran_root)
 
-win_folder = win_package_dir(cran_root)
-source_folder = source_package_dir(cran_root)
+win_folder <- win_package_dir(cran_root)
+source_folder <- source_package_dir(cran_root)
 
 
 # Unit tests ----------------------------------------------------------------------------------
@@ -42,8 +42,9 @@ test_that("Import packages", {
 
 
 test_that("PACKAGES metadata files are created", {
+    package_files_source <- file.path(source_folder, c("PACKAGES", "PACKAGES.gz", "PACKAGES.rds"))
+    # expect_false(fs::file_exists(package_files_source))
     tools::write_PACKAGES(source_folder, type = "source")
-    package_files_source = file.path(source_folder, c("PACKAGES", "PACKAGES.gz", "PACKAGES.rds"))
     expect_true(all(fs::file_exists(package_files_source)))
 
 
@@ -70,10 +71,10 @@ test_that("Archive package", {
     expect_message(archive_package(cran_root, "foo"), "No binary packages archived")
 
 
-    foo_source_package = source_package_files(cran_root, "foo")
+    foo_source_package <- source_package_files(cran_root, "foo")
     import_source_package(cran_root, testdata_path("foo_0.0.2.tar.gz"))
 
-    # foo_bin_package = windows_package_files(cran_root, "foo")
+    # foo_bin_package <- windows_package_files(cran_root, "foo")
     # fs::file_copy(
     #     foo_bin_package,
     #     file.path(win_package_dir(cran_root), "foo_0.0.2.zip")
@@ -99,7 +100,7 @@ test_that("Archive package", {
 
 
 test_that("Update archive metadata", {
-    metadata = formatted_archive_metadata(cran_root)
+    metadata <- formatted_archive_metadata(cran_root)
 
     expect_type(metadata, "list")
     expect_named(metadata, "foo")
@@ -119,8 +120,8 @@ test_that("Update archive metadata", {
 # End-to-end test -----------------------------------------------------------------------------
 
 test_that("End-to-end archive update", {
-    cran_parent = tempdir()
-    cran_root = file.path(cran_parent, "e2e-cran")
+    cran_parent <- tempdir()
+    cran_root <- file.path(cran_parent, "e2e-cran")
     # dir.create(cran_root)
     make_demo_cran(cran_root)
     on.exit(unlink(cran_root, recursive = TRUE), add = TRUE)

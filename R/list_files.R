@@ -1,5 +1,3 @@
-# List files ----------------------------------------------------------------------------------
-
 #' List packages
 #'
 #' List `tar.gz` or `zip` archives of a package sorted according to modification time with newest
@@ -10,12 +8,15 @@
 #'
 #' @return A vector with file names.
 list_package_files <- function(package_root, package_name) {
-    package_file_pattern <- paste0("^", package_name, "_([[:digit:]]{1,4}\\.[[:digit:]]{1,2}\\.[[:digit:]]{1,})\\.(tar\\.gz|zip)$")
+    package_file_pattern <- paste0(
+        "^", package_name,
+        "_([[:digit:]]{1,}\\.[[:digit:]]{1,}\\.[[:digit:]]{1,})\\.(tar\\.gz|zip)$"
+    )
 
     unsorted_files <- list.files(package_root, package_file_pattern, full.names = TRUE)
 
-    version_numbers <- sub(package_file_pattern, "\\1", basename(unsorted_files)) %>%
-        package_version()
+    version_numbers_as_strings <- sub(package_file_pattern, "\\1", basename(unsorted_files))
+    version_numbers <- package_version(version_numbers_as_strings)
 
     unsorted_files[order(version_numbers, decreasing = TRUE)]
 }
@@ -41,4 +42,3 @@ windows_package_files <- function(cran_root, package_name) {
 archive_package_files <- function(cran_root) {
     fs::dir_ls(archive_path(cran_root), recurse = 1, fail = FALSE, glob = "*.tar.gz")
 }
-

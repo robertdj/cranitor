@@ -11,6 +11,7 @@ create_empty_package <- function(package_name, version) {
     devtools::build(pkg = package_path)
 }
 
+
 file.copy(create_empty_package("foo", "0.0.1"), here::here("inst", "testdata"), overwrite = TRUE)
 file.copy(create_empty_package("foo", "0.0.2"), here::here("inst", "testdata"), overwrite = TRUE)
 

@@ -82,4 +82,3 @@ archive_windows_package <- function(cran_root, bin_files) {
 basename_from_targz <- function(targz) {
     vapply(strsplit(basename(targz), "_"), `[[`, character(1), 1)
 }
-

@@ -25,4 +25,3 @@ import_win_package <- function(cran_root, package) {
 
     fs::file_copy(package, win_package_dir(cran_root))
 }
-

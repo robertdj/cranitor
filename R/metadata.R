@@ -27,8 +27,6 @@ package_metadata <- function(package_files) {
     package_basename <- basename(package_files)
     rownames(metadata) <- file.path(basename_from_targz(package_basename), package_basename)
 
-    # metadata <- metadata[, c("size", "isdir", "mode", "mtime", "ctime", "atime")]
-
     return(metadata)
 }
 
