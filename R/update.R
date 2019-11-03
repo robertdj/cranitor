@@ -24,15 +24,13 @@ build_update_cran <- function(cran_root, ...) {
 #'
 #' @export
 update_cran <- function(cran_root, targz_file, zip_file = NULL) {
-    # TODO: Handle multiple zip files for multiple versions of R
-    # assertthat::assert_that(
-    #     assertthat::are_equal(basename_from_targz(targz_file), basename_from_targz(zip_file))
-    # )
+    update_cran_source(cran_root, targz_file)
+    update_cran_source(cran_root, zip_file)
+}
 
+
+update_cran_source <- function(cran_root, targz_file) {
     import_source_package(cran_root, targz_file)
-
-    if (!is.null(zip_file))
-        import_win_package(cran_root, zip_file)
 
     archive_package(cran_root, basename_from_targz(targz_file))
 
@@ -40,6 +38,16 @@ update_cran <- function(cran_root, targz_file, zip_file = NULL) {
         make_archive_metadata(cran_root)
 
     tools::write_PACKAGES(source_package_dir(cran_root), type = "source")
-    tools::write_PACKAGES(win_package_dir(cran_root), type = "win.binary")
+
 }
 
+
+update_cran_win <- function(cran_root, zip_file) {
+    import_win_package(cran_root, zip_file)
+
+    # TODO: basename_from_targz is not a good name
+    archive_windows_package(cran_root, basename_from_targz(zip_file))
+
+    tools::write_PACKAGES(win_package_dir(cran_root), type = "win.binary")
+
+}
