@@ -19,7 +19,6 @@ Suggests:
     here,
     processx,
     remotes,
-    roxygen2,
     servr,
     testthat (>= 2.1.0),
     usethis
