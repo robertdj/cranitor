@@ -36,10 +36,7 @@ archive_metadata_path <- function(cran_root) {
 #'
 #' @inheritParams update_cran
 #'
-#' @return The path of `archive.rds` relative to `cran_root`
+#' @return The path of the `Archive` folder relative to `cran_root`
 archive_path <- function(cran_root) {
     file.path(source_package_dir(cran_root), "Archive")
 }
-
-
-

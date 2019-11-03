@@ -10,7 +10,7 @@ archive_path(cran_root)
 \item{cran_root}{The folder containing the CRAN.}
 }
 \value{
-The path of \code{archive.rds} relative to \code{cran_root}
+The path of the \code{Archive} folder relative to \code{cran_root}
 }
 \description{
 The path of the Archive folder
