@@ -30,6 +30,8 @@ archive_package <- function(cran_root, package_name) {
         message("No source packages archived")
     }
 
+    # TODO: Split this function.
+
     # TODO: Make sure that the source and bin have the same version
 
     bin_files <- windows_package_files(cran_root, package_name)

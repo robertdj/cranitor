@@ -11,8 +11,7 @@ package_metadata(package_files)
 }
 \value{
 A \code{data.frame} with columns \code{size}, \code{isdir}, \code{mode}, \code{mtime}, \code{ctime}, \code{atime}, \code{uid},
-\code{gid}, \code{uname} and \code{grname}
-The last four fields are the same for all packages.
+\code{gid}, \code{uname} and \code{grname}. This is file \code{\link[=file.info]{file.info()}} for the package file.
 }
 \description{
 Get the metadata of a package from its \code{tar.gz} source file.

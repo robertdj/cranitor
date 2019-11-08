@@ -2,7 +2,6 @@
 
 cran_root <- file.path(tempdir(), "cran")
 
-dir.create(cran_root)
 make_local_cran(cran_root)
 
 win_folder <- win_package_dir(cran_root)

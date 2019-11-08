@@ -3,7 +3,7 @@ make_demo_cran <- function(cran_root = NULL) {
         cran_root <- file.path(tempdir(), "demo_cran")
 
     if (dir.exists(cran_root)) {
-        warning(cran_root, "already exists. It is now replaced.")
+        warning(cran_root, " already exists. It is now replaced.")
         unlink(cran_root, recursive = TRUE)
     }
 
