@@ -1,12 +1,28 @@
 create_empty_package <- function(package_name, version) {
     package_path <- file.path(tempdir(), package_name)
     dir.create(package_path)
-    usethis::create_package(package_path, rstudio = FALSE, open = FALSE)
-    unlink(file.path(package_path, "R"), recursive = TRUE)
 
-    package_desc <- desc::desc(file = file.path(package_path, "DESCRIPTION"))
-    package_desc$set_version(version)
-    package_desc$write()
+    writeLines(
+        "exportPattern(\"^[^\\\\.]\")",
+        file.path(package_path, "NAMESPACE")
+    )
+
+    writeLines(c(
+        paste("Package:", package_name),
+        "Title: What the Package Does (One Line, Title Case)",
+        paste("Version:", version),
+        "Authors@R:",
+        "    person(given = 'First',",
+        "           family = 'Last',",
+        "           role = c('aut', 'cre'),",
+        "           email = 'first.last@example.com',",
+        "           comment = c(ORCID = 'YOUR-ORCID-ID'))",
+        "Description: What the package does (one paragraph).",
+        "License: What license it uses",
+        "Encoding: UTF-8",
+        "LazyData: true"),
+        file.path(package_path, "DESCRIPTION")
+    )
 
     devtools::build(pkg = package_path)
 }
