@@ -1,21 +1,3 @@
-# TODO: The functions in this file may be unnecessary
-
-#' Build package files and import to CRAN
-#'
-#' Update DESCRIPTION, build package files for CRAN and import them.
-#'
-#' @inheritParams update_cran
-#' @param ... Input for [devtools::build()] besides `binary`
-#'
-#' @export
-build_update_cran <- function(cran_root, ...) {
-    targz_file <- devtools::build(binary = FALSE, ...)
-    zip_file <- devtools::build(binary = TRUE, ...)
-
-    update_cran(cran_root, targz_file, zip_file)
-}
-
-
 #' Update local CRAN with the package
 #'
 #' Import package files into a local CRAN and update the metadata. Check the README in the repo.
@@ -40,7 +22,6 @@ update_cran_source <- function(cran_root, targz_file) {
         make_archive_metadata(cran_root)
 
     tools::write_PACKAGES(source_package_dir(cran_root), type = "source")
-
 }
 
 
