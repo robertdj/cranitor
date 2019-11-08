@@ -14,11 +14,9 @@ Imports:
     assertthat,
     fs
 Suggests:
-    desc,
     devtools,
     here,
     processx,
     remotes,
     servr,
-    testthat (>= 2.1.0),
-    usethis
+    testthat (>= 2.1.0)
