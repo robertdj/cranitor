@@ -1,8 +1,9 @@
 Package: cranitor
 Title: Janitor for a CRAN
-Version: 0.0.2
+Version: 0.0.3
 Authors@R: person("Robert", "Dahl Jacobsen", role = c("aut", "cre"), email = "git@dahl-jacobsen.dk")
-Description: Taking care of a CRAN from initialization to updating metadata when new packages/package versions are included.
+Description: Taking care of a CRAN from initialization to updating metadata when new 
+    packages/package versions are included.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -14,11 +15,9 @@ Imports:
     assertthat,
     fs
 Suggests:
-    desc,
-    devtools,
     here,
+    pkgbuild,
     processx,
     remotes,
     servr,
-    testthat (>= 2.1.0),
-    usethis
+    testthat (>= 2.1.0)
