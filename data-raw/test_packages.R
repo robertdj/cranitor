@@ -9,22 +9,18 @@ create_empty_package <- function(package_name, version) {
 
     writeLines(c(
         paste("Package:", package_name),
-        "Title: What the Package Does (One Line, Title Case)",
+        "Title: Test package for cranitor",
         paste("Version:", version),
-        "Authors@R:",
-        "    person(given = 'First',",
-        "           family = 'Last',",
-        "           role = c('aut', 'cre'),",
-        "           email = 'first.last@example.com',",
-        "           comment = c(ORCID = 'YOUR-ORCID-ID'))",
-        "Description: What the package does (one paragraph).",
-        "License: What license it uses",
+        "Authors@R: person('First', 'Last', role = c('aut', 'cre'), email = 'first.last@example.com')",
+        "Description: Test package for cranitor.",
+        "License: MIT",
         "Encoding: UTF-8",
-        "LazyData: true"),
-        file.path(package_path, "DESCRIPTION")
+        "LazyData: true"
+    ),
+    file.path(package_path, "DESCRIPTION")
     )
 
-    devtools::build(pkg = package_path)
+    pkgbuild::build(path = package_path, binary = FALSE)
 }
 
 
