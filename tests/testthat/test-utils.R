@@ -33,6 +33,7 @@ test_that("Import packages", {
 })
 
 
+# This is more a test of write_PACKAGES
 test_that("PACKAGES metadata files are created", {
     package_files_source <- file.path(source_folder, c("PACKAGES", "PACKAGES.gz", "PACKAGES.rds"))
     expect_false(all(file.exists(package_files_source)))
@@ -41,7 +42,7 @@ test_that("PACKAGES metadata files are created", {
     expect_true(all(file.exists(package_files_source)))
 
     packages <- readLines(package_files_source[1])
-    expect_equal(length(packages), 4)
+    expect_equal(length(packages), 5)
 
     packages_gz_con <- gzfile(package_files_source[2], "rt")
     packages_gz <- readLines(packages_gz_con)
@@ -53,8 +54,8 @@ test_that("PACKAGES metadata files are created", {
     expect_equal(nrow(packages_rds), 1)
 
     expect_equal(
-        paste(c("Package:", "Version:", "MD5sum:", "NeedsCompilation:"),
-              packages_rds[, c("Package", "Version", "MD5sum", "NeedsCompilation")]),
+        paste(c("Package:", "Version:", "License:", "MD5sum:", "NeedsCompilation:"),
+              packages_rds[, c("Package", "Version", "License", "MD5sum", "NeedsCompilation")]),
         packages
     )
 
