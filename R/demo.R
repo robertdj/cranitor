@@ -1,3 +1,11 @@
+#' Make a demo CRAN
+#'
+#' @param cran_root The folder containing the demo CRAN. If `NULL`, the folder `demo_cran` will be
+#' created in a temporary folder.
+#'
+#' @return The folder `cran_root`
+#'
+#' @export
 make_demo_cran <- function(cran_root = NULL) {
     if (is.null(cran_root))
         cran_root <- file.path(tempdir(), "demo_cran")
