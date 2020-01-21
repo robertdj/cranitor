@@ -13,6 +13,6 @@ basename_from_targz(targz)
 A vector of package names.
 }
 \description{
-A packed source code file is of the form \code{<package name>_<version>.tar.gz}. This function
-returns \code{<package name>} from such a file name.
+A packed source code file is of the form \verb{<package name>_<version>.tar.gz}. This function
+returns \verb{<package name>} from such a file name.
 }

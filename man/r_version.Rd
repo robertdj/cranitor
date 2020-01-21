@@ -7,5 +7,5 @@
 r_version()
 }
 \description{
-Get the R version as \code{<major>.<minor>}.
+Get the R version as \verb{<major>.<minor>}.
 }
