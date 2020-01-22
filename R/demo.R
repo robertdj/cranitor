@@ -8,7 +8,7 @@
 #' @export
 make_demo_cran <- function(cran_root = NULL) {
     if (is.null(cran_root))
-        cran_root <- file.path(tempdir(), "demo_cran")
+        cran_root <- fs::path(fs::path_temp(), "demo_cran")
 
     if (dir.exists(cran_root)) {
         warning(cran_root, " already exists. It is now replaced.")

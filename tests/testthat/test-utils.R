@@ -109,10 +109,13 @@ test_that("Update archive metadata", {
     expect_type(metadata, "list")
     expect_named(metadata, "foo")
     expect_s3_class(metadata$foo, "data.frame")
-    expect_named(
-        metadata$foo,
-        c("size", "isdir", "mode", "mtime", "ctime", "atime", "uid", "gid", "uname", "grname")
+
+    sysname <- tolower(Sys.info()["sysname"])
+    file_info <- switch(sysname,
+        "windows" = c("size", "isdir", "mode", "mtime", "ctime", "atime", "exe"),
+        "linux" = c("size", "isdir", "mode", "mtime", "ctime", "atime", "uid", "gid", "uname", "grname")
     )
+    expect_named(metadata$foo, file_info)
 
 
     expect_false(file.exists(archive_metadata_path(cran_root)))
