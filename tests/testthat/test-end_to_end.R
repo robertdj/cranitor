@@ -1,9 +1,9 @@
 test_that("End-to-end archive update", {
     cran_parent <- tempdir()
     cran_root <- file.path(cran_parent, "e2e-cran")
+    on.exit(unlink(cran_root, recursive = TRUE), add = TRUE)
 
     make_demo_cran(cran_root)
-    on.exit(unlink(cran_root, recursive = TRUE), add = TRUE)
 
     # The sorting is different in devtools::test() and devtools::check()
     expect_equal(
@@ -18,4 +18,16 @@ test_that("End-to-end archive update", {
             "src/contrib/PACKAGES.rds"
         ))
     )
+})
+
+
+test_that("Overwrite demo archive", {
+    cran_parent <- tempdir()
+    cran_root <- file.path(cran_parent, "e2e-cran")
+    on.exit(unlink(cran_root, recursive = TRUE), add = TRUE)
+
+    make_demo_cran(cran_root)
+
+    expect_true(file.exists(cran_root))
+    expect_warning(make_demo_cran(cran_root), "e2e-cran already exists. It is now replaced")
 })

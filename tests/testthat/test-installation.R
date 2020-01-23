@@ -3,9 +3,12 @@ cran_root <- make_demo_cran()
 test_library <- file.path(tempdir(), "r_test_library")
 dir.create(test_library)
 
+cran_port <- servr::random_port()
+cran_url <- paste0("http://localhost:", cran_port)
+
 p <- processx::process$new(
     file.path(Sys.getenv("R_HOME"), "bin", "R"),
-    c("-e", paste0("servr::httd(dir = '", cran_root, "', port = '1234')")),
+    c("-e", paste0("servr::httd(dir = '", cran_root, "', port = ", cran_port, ")")),
     cleanup_tree = TRUE
 )
 # print(p)
@@ -15,7 +18,7 @@ Sys.sleep(1)
 
 
 test_that("CRAN lists available packages", {
-    demo_cran_packages <- available.packages("http://localhost:1234/src/contrib")
+    demo_cran_packages <- available.packages(repos = cran_url)
 
     expect_type(demo_cran_packages, "character")
     expect_equal(ncol(demo_cran_packages), 17)
@@ -31,7 +34,9 @@ test_that("Install source package from hosted CRAN", {
     test_library_packages <- installed.packages(lib.loc = test_library)
     expect_equal(nrow(test_library_packages), 0)
 
-    install.packages("foo", lib = test_library, repos = "http://localhost:1234", type = "source", quiet = TRUE)
+    install.packages(
+        "foo", lib = test_library, repos = cran_url, type = "source", quiet = TRUE
+    )
 
     test_library_packages <- installed.packages(lib.loc = test_library)
     expect_equal(rownames(test_library_packages), c(Package = "foo"))
@@ -41,7 +46,9 @@ test_that("Install source package from hosted CRAN", {
 
 
 test_that("Install archived versions of package from hosted CRAN", {
-    remotes::install_version("foo", version = "0.0.1", lib = test_library, repos = "http://localhost:1234", quiet = TRUE)
+    remotes::install_version(
+        "foo", version = "0.0.1", lib = test_library, repos = cran_url, quiet = TRUE
+    )
 
     test_library_packages <- installed.packages(lib.loc = test_library)
     expect_equal(test_library_packages[, "Package"], "foo")

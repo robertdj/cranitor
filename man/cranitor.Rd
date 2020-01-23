@@ -12,6 +12,13 @@ are included.
 \details{
 See the README on \href{https://github.com/robertdj/cranitor}{GitHub}.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/robertdj/cranitor}
+}
+
+}
 \author{
 \strong{Maintainer}: Robert Dahl Jacobsen \email{git@dahl-jacobsen.dk}
 
