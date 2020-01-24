@@ -7,8 +7,9 @@ Description: Taking care of a CRAN from initialization to updating metadata when
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+URL: https://github.com/robertdj/cranitor
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 Depends:
     R (>= 3.5)
 Imports:
