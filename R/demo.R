@@ -36,7 +36,7 @@ make_demo_cran <- function(cran_root = NULL) {
 #'
 #' @param package_name The name of the package
 #' @param version The version of the package
-#' @param ... Parameters for [pkgbuild::build()]
+#' @param ... Arguments for [pkgbuild::build()]
 #'
 #' @details The demo package consists of a `DESCRIPTION` file and a `NAMESPACE` file.
 #'
@@ -62,8 +62,8 @@ create_empty_package <- function(package_name, version, ...) {
         "License: MIT",
         "Encoding: UTF-8",
         "LazyData: true"
-    ),
-    con = fs::path(package_path, "DESCRIPTION")
+        ),
+        con = fs::path(package_path, "DESCRIPTION")
     )
 
     pkgbuild::build(path = package_path, ...)
