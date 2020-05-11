@@ -20,15 +20,15 @@ test_that("Local CRAN has expected folder structure", {
 
 
 test_that("Import packages", {
-    import_source_package(cran_root, testdata_path("foo_0.0.1.tar.gz"))
+    import_source_package(cran_root, src_package_paths["foo_0.0.1"])
     expect_equal(basename(source_package_files(cran_root, "foo")), "foo_0.0.1.tar.gz")
 
     # TODO: Until a zip file is included in the test data
-    expect_error(
-        import_win_package(cran_root, testdata_path("foo_0.0.1.zip")),
-        "no file found",
-        ignore.case = TRUE
-    )
+    # expect_error(
+    #     import_win_package(cran_root, bin_package_paths["foo_0.0.1"]),
+    #     "no file found",
+    #     ignore.case = TRUE
+    # )
     # expect_equal(basename(windows_package_files(cran_root, "foo")), "foo_0.0.1.zip")
 })
 
@@ -74,7 +74,7 @@ test_that("Archive package", {
 
 
     foo_source_package <- source_package_files(cran_root, "foo")
-    import_source_package(cran_root, testdata_path("foo_0.0.2.tar.gz"))
+    import_source_package(cran_root, src_package_paths["foo_0.0.2"])
 
     expect_equal(
         basename(source_package_files(cran_root, "foo")),

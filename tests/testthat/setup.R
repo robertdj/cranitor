@@ -32,11 +32,14 @@ package_tbl <- tibble::tribble(
     "bar", "0.0.1",
 )
 
+package_names <- do.call(paste, c(package_tbl, sep = "_"))
+
 src_package_paths <- purrr::pmap_chr(
     package_tbl, create_empty_package,
     binary = FALSE, quiet = TRUE, dest_path = fs::path_temp()
 )
 
+names(src_package_paths) <- package_names
 
 sysname <- tolower(Sys.info()[["sysname"]])
 if ("windows" %in% sysname || "mac" %in% sysname) {
@@ -44,4 +47,6 @@ if ("windows" %in% sysname || "mac" %in% sysname) {
         package_tbl, create_empty_package,
         binary = TRUE, quiet = TRUE, dest_path = fs::path_temp()
     )
+
+    names(bin_package_paths) <- package_names
 }
