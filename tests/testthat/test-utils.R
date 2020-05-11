@@ -1,6 +1,6 @@
 # Setup ---------------------------------------------------------------------------------------
 
-cran_root <- file.path(tempdir(), "cran")
+cran_root <- fs::path(tempdir(), "cran")
 
 make_local_cran(cran_root)
 
@@ -11,11 +11,11 @@ source_folder <- source_package_dir(cran_root)
 # Unit tests ----------------------------------------------------------------------------------
 
 test_that("Local CRAN has expected folder structure", {
-    expect_true(dir.exists(win_folder))
-    expect_true(dir.exists(source_folder))
+    expect_true(fs::dir_exists(win_folder))
+    expect_true(fs::dir_exists(source_folder))
 
-    expect_length(dir(win_folder), 0)
-    expect_length(dir(source_folder), 0)
+    expect_length(fs::dir_ls(win_folder), 0)
+    expect_length(fs::dir_ls(source_folder), 0)
 })
 
 
@@ -35,11 +35,11 @@ test_that("Import packages", {
 
 # This is more a test of write_PACKAGES
 test_that("PACKAGES metadata files are created", {
-    package_files_source <- file.path(source_folder, c("PACKAGES", "PACKAGES.gz", "PACKAGES.rds"))
+    package_files_source <- fs::path(source_folder, c("PACKAGES", "PACKAGES.gz", "PACKAGES.rds"))
     expect_false(all(file.exists(package_files_source)))
 
     tools::write_PACKAGES(source_folder, type = "source")
-    expect_true(all(file.exists(package_files_source)))
+    expect_true(all(fs::file_exists(package_files_source)))
 
     packages <- readLines(package_files_source[1])
     expect_equal(length(packages), 5)
@@ -66,8 +66,8 @@ test_that("PACKAGES metadata files are created", {
 
 
 test_that("Archive package", {
-    expect_false(dir.exists(archive_path(cran_root)))
-    expect_false(file.exists(archive_metadata_path(cran_root)))
+    expect_false(fs::dir_exists(archive_path(cran_root)))
+    expect_false(fs::file_exists(archive_metadata_path(cran_root)))
 
     expect_message(archive_package(cran_root, "foo"), "No source packages archived")
     expect_message(archive_package(cran_root, "foo"), "No binary packages archived")
@@ -77,7 +77,7 @@ test_that("Archive package", {
     import_source_package(cran_root, src_package_paths["foo_0.0.2"])
 
     expect_equal(
-        basename(source_package_files(cran_root, "foo")),
+        fs::path_file(source_package_files(cran_root, "foo")),
         c("foo_0.0.2.tar.gz", "foo_0.0.1.tar.gz")
     )
 
@@ -95,10 +95,10 @@ test_that("Archive package", {
 
     # TODO: Have an archive_source_function and an archive_bin_function
     archive_package(cran_root, "foo")
-    expect_true(dir.exists(archive_path(cran_root)))
+    expect_true(fs::dir_exists(archive_path(cran_root)))
 
-    expect_equal(basename(archive_package_files(cran_root)), "foo_0.0.1.tar.gz")
-    expect_equal(basename(source_package_files(cran_root, "foo")), "foo_0.0.2.tar.gz")
+    expect_equal(fs::path_file(archive_package_files(cran_root)), "foo_0.0.1.tar.gz")
+    expect_equal(fs::path_file(source_package_files(cran_root, "foo")), "foo_0.0.2.tar.gz")
     # expect_equal(basename(windows_package_files(cran_root, "foo")), "foo_0.0.2.zip")
 })
 
@@ -118,10 +118,10 @@ test_that("Update archive metadata", {
     expect_named(metadata$foo, file_info)
 
 
-    expect_false(file.exists(archive_metadata_path(cran_root)))
+    expect_false(fs::file_exists(archive_metadata_path(cran_root)))
     make_archive_metadata(cran_root)
-    expect_true(file.exists(archive_metadata_path(cran_root)))
+    expect_true(fs::file_exists(archive_metadata_path(cran_root)))
 })
 
 
-unlink(cran_root, recursive = TRUE)
+fs::dir_delete(cran_root)

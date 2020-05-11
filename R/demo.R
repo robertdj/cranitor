@@ -44,13 +44,13 @@ make_demo_cran <- function(cran_root = NULL) {
 #'
 #' @export
 create_empty_package <- function(package_name, version, ...) {
-    package_path <- file.path(tempdir(), package_name)
+    package_path <- fs::path(tempdir(), package_name)
     fs::dir_create(package_path)
     withr::defer(fs::dir_delete(package_path))
 
     writeLines(
         "exportPattern(\"^[^\\\\.]\")",
-        con = file.path(package_path, "NAMESPACE")
+        con = fs::path(package_path, "NAMESPACE")
     )
 
     writeLines(c(
@@ -63,7 +63,7 @@ create_empty_package <- function(package_name, version, ...) {
         "Encoding: UTF-8",
         "LazyData: true"
     ),
-    con = file.path(package_path, "DESCRIPTION")
+    con = fs::path(package_path, "DESCRIPTION")
     )
 
     pkgbuild::build(path = package_path, ...)

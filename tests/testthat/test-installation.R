@@ -1,7 +1,7 @@
 cran_root <- make_demo_cran()
 
-test_library <- file.path(tempdir(), "r_test_library")
-dir.create(test_library)
+test_library <- fs::path(tempdir(), "r_test_library")
+fs::dir_create(test_library)
 
 cran_port <- servr::random_port()
 cran_url <- paste0("http://localhost:", cran_port)
