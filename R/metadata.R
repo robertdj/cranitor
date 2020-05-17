@@ -4,6 +4,9 @@
 #'
 #' @inheritParams update_cran
 formatted_archive_metadata <- function(cran_root) {
+    if (isFALSE(fs::dir_exists(archive_path(cran_root))))
+        return(list())
+
     archived_package_paths <- archive_package_files(cran_root)
     archived_package_filenames <- basename(archived_package_paths)
 
@@ -20,7 +23,7 @@ formatted_archive_metadata <- function(cran_root) {
 #' @param package_files A vector of strings with locations of `tar.gz` source files.
 #'
 #' @return A `data.frame` with columns `size`, `isdir`, `mode`, `mtime`, `ctime`, `atime`, `uid`,
-#' `gid`, `uname` and `grname`. This is file [file.info()] for the package file.
+#' `gid`, `uname` and `grname`. This is [file.info()] for the package file.
 package_metadata <- function(package_files) {
     metadata <- file.info(fs::path(package_files))
     package_basename <- basename(package_files)
