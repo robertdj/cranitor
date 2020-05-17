@@ -1,4 +1,5 @@
 test_that("Import source package", {
+    # TODO: Should this defer be in a function?
     withr::defer(fs::dir_delete(cran_root), envir = environment())
 
     import_source_package(cran_root, src_package_paths[1])
@@ -63,13 +64,12 @@ test_that("Update CRAN with new version of source package", {
 test_that("Unexpected files are deleted from CRAN", {
     withr::defer(fs::dir_delete(cran_root), envir = environment())
 
-    update_cran_source(cran_root, src_package_paths[1])
+    make_demo_cran(cran_root, packages = src_package_paths)
 
-    # cran_files <- fs::dir_ls(cran_root, type = "file", recurse = TRUE)
-    cran_files <- list.files(fs::path(cran_root, "src", "contrib"), recursive = TRUE)
+    unwanted_file <- fs::path(source_package_dir(cran_root), "random_file")
+    fs::file_create(unwanted_file)
+    expect_true(fs::file_exists(unwanted_file))
 
-    expect_true(basename(src_package_paths[1]) %in% cran_files)
-    expect_true("PACKAGES" %in% cran_files)
-    expect_true("PACKAGES.gz" %in% cran_files)
-    expect_true("PACKAGES.rds" %in% cran_files)
+    clean_cran_source(cran_root)
+    expect_false(fs::file_exists(unwanted_file))
 })
