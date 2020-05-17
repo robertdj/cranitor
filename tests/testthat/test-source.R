@@ -1,6 +1,5 @@
 test_that("Import source package", {
-    # TODO: Should this defer be in a function?
-    withr::defer(fs::dir_delete(cran_root), envir = environment())
+    clean_test_cran(cran_root)
 
     import_source_package(cran_root, src_package_paths[1])
 
@@ -10,7 +9,7 @@ test_that("Import source package", {
 
 
 test_that("Import the same source package twice", {
-    withr::defer(fs::dir_delete(cran_root))
+    clean_test_cran(cran_root)
 
     import_source_package(cran_root, src_package_paths[1])
     expect_error(
@@ -21,7 +20,7 @@ test_that("Import the same source package twice", {
 
 
 test_that("Update CRAN with source package", {
-    withr::defer(fs::dir_delete(cran_root), envir = environment())
+    clean_test_cran(cran_root)
 
     update_cran_source(cran_root, src_package_paths[1])
 
@@ -38,7 +37,7 @@ test_that("Update CRAN with source package", {
 
 
 test_that("Update CRAN with new version of source package", {
-    withr::defer(fs::dir_delete(cran_root), envir = environment())
+    clean_test_cran(cran_root)
 
     f1 <- src_package_paths[1]
     update_cran_source(cran_root, f1)
@@ -62,7 +61,7 @@ test_that("Update CRAN with new version of source package", {
 
 
 test_that("Unexpected files are deleted from CRAN", {
-    withr::defer(fs::dir_delete(cran_root), envir = environment())
+    clean_test_cran(cran_root)
 
     make_demo_cran(cran_root, packages = src_package_paths)
 

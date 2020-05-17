@@ -1,6 +1,8 @@
 cran_root <- fs::path_temp("cranitor_test", "demo_cran")
 
 
+# Source --------------------------------------------------------------------------------------
+
 package_tbl <- tibble::tribble(
     ~package_name, ~version,
     "foo", "0.0.1",
@@ -16,6 +18,9 @@ src_package_paths <- purrr::pmap_chr(
 )
 
 names(src_package_paths) <- package_names
+
+
+# Binary --------------------------------------------------------------------------------------
 
 if (is_win_or_mac()) {
     bin_package_paths <- purrr::pmap_chr(
