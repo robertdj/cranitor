@@ -3,64 +3,73 @@
 #' Import package files into a local CRAN and update the metadata. Check the README in the repo.
 #'
 #' @param cran_root The folder containing the CRAN.
-#' @param targz_file The location of the `tar.gz` file for source.
-#' @param zip_file The location of the `zip` file for Windows.
+#' @param package_file The location of the package file in either `tar.gz` format (source), `zip`
+#' (Windows) or `tgz` (Mac).
 #'
 #' @export
-update_cran <- function(cran_root, targz_file, zip_file = NULL) {
-    update_cran_source(cran_root, targz_file)
-    update_cran_source(cran_root, zip_file)
+update_cran <- function(cran_root, package_file) {
+    switch(
+        package_ext(package_file),
+        "tar.gz" = update_cran_source(cran_root, package_file),
+        "zip"    = update_cran_win(cran_root, package_file),
+        "tgz"    = update_cran_mac(cran_port, package_file)
+    )
 }
 
 
-update_cran_source <- function(cran_root, targz_file) {
-    import_source_package(cran_root, targz_file)
 
-    archive_package(cran_root, basename_from_targz(targz_file))
+get_package_desc <- function(archive) {
+    package_name <- package_name_from_filename(basename(archive))
 
-    if (isTRUE(file.exists(archive_metadata_path(cran_root))))
-        make_archive_metadata(cran_root)
+    desc_file <- get_file_in_archive(archive, fs::path(package_name, "DESCRIPTION"))
 
-    tools::write_PACKAGES(source_package_dir(cran_root), type = "source")
+    desc <- tryCatch(read.dcf(desc_file), error = identity)
+
+    if ((inherits(desc, "error")) || (length(desc) == 0))
+        stop("Malformed DESCRIPTION in ", archive)
+
+    return(desc[1L, ])
 }
 
 
-get_package_desc <- function(package_file) {
-    package_name <- package_name_from_filename(basename(package_file))
+get_package_meta <- function(archive) {
+    package_name <- package_name_from_filename(basename(archive))
 
-    if (package_ext(package_file) == "zip") {
+    meta_file <- get_file_in_archive(archive, fs::path(package_name, "Meta", "package.rds"))
+
+    meta <- tryCatch(readRDS(meta_file), error = identity)
+
+    if (inherits(meta, "error"))
+        stop("Malformed package meta data in ", archive)
+
+    return(meta)
+}
+
+
+get_file_in_archive <- function(archive, package_file) {
+    if (package_ext(archive) == "zip") {
         extractor <- unzip
     } else {
         extractor <- untar
     }
 
+    tmp_dir <- fs::path_temp(package_file)
+    withr::defer_parent(fs::dir_delete(tmp_dir))
 
-    tmp_dir <- fs::path_temp(package_name)
-    # Move to separate function and use defer_parent
-    withr::defer(fs::dir_delete(tmp_dir))
-
-    files_in_tar <- extractor(package_file, list = TRUE)
+    # TODO: Consider just extracting the file in a tryCatch
+    files_in_archive <- extractor(archive, list = TRUE)
     # unzip returns a dataframe. untar returns a vector
-    if (is.data.frame(files_in_tar))
-        files_in_tar <- files_in_tar$Name
+    if (is.data.frame(files_in_archive))
+        files_in_archive <- files_in_archive$Name
 
-    desc_location <- fs::path(package_name, "DESCRIPTION")
-    desc_exists_in_tar <- any(desc_location == files_in_tar)
+    file_exists_in_archive <- any(package_file == files_in_archive)
 
-    if (isFALSE(desc_exists_in_tar))
-        stop("DESCRIPTION is not in expected location in package file")
+    if (isFALSE(file_exists_in_archive))
+        stop(package_file, " does not exist in ", archive)
 
-    extractor(package_file, files = desc_location, exdir = tmp_dir)
+    extractor(archive, files = package_file, exdir = tmp_dir)
 
-    desc_file <- fs::path(tmp_dir, desc_location)
-
-
-    desc <- tryCatch(read.dcf(desc_file), error = identity)
-
-    if ((inherits(desc, "error")) || (length(desc) == 0))
-        stop("Malformed DESCRIPTION in ", package_file)
-
-    return(desc)
+    fs::path(tmp_dir, package_file)
 }
 
 
@@ -76,3 +85,20 @@ update_cran_win <- function(cran_root, zip_file) {
 
     tools::write_PACKAGES(win_package_dir(cran_root), type = "win.binary")
 }
+
+
+update_cran_mac <- function(cran_root, tgz_file) {
+    print("mac")
+}
+
+
+# TODO: This is basename_from_targz
+package_name_from_filename <- function(package_file) {
+    # TODO: Make sure that we work on basename(package_file)
+    package_file_sans_path <- basename(package_file)
+    substr(package_file_sans_path, 1, regexpr("_", package_file_sans_path) - 1)
+
+    # sub("(^.*?)_", "\\1", basename(package_file))
+    # sub("(^[:alpha:].*?)_", "\\1", basename(package_file))
+}
+

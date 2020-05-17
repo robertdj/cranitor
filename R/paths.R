@@ -10,7 +10,7 @@ r_version <- function() {
 #'
 #' @inheritParams update_cran
 source_package_dir <- function(cran_root) {
-    file.path(cran_root, "src", "contrib")
+    fs::path(cran_root, "src", "contrib")
 }
 
 
@@ -28,7 +28,7 @@ win_package_dir <- function(cran_root) {
 #'
 #' @return The path of `archive.rds` relative to `cran_root`
 archive_metadata_path <- function(cran_root) {
-    file.path(source_package_dir(cran_root), "Meta", "archive.rds")
+    fs::path(source_package_dir(cran_root), "Meta", "archive.rds")
 }
 
 
@@ -38,5 +38,5 @@ archive_metadata_path <- function(cran_root) {
 #'
 #' @return The path of the `Archive` folder relative to `cran_root`
 archive_path <- function(cran_root) {
-    file.path(source_package_dir(cran_root), "Archive")
+    fs::path(source_package_dir(cran_root), "Archive")
 }

@@ -7,7 +7,7 @@ formatted_archive_metadata <- function(cran_root) {
     archived_package_paths <- archive_package_files(cran_root)
     archived_package_filenames <- basename(archived_package_paths)
 
-    package_names <- basename_from_targz(archived_package_filenames)
+    package_names <- package_name_from_filename(archived_package_filenames)
 
     split(package_metadata(archived_package_paths), package_names)
 }
@@ -22,9 +22,9 @@ formatted_archive_metadata <- function(cran_root) {
 #' @return A `data.frame` with columns `size`, `isdir`, `mode`, `mtime`, `ctime`, `atime`, `uid`,
 #' `gid`, `uname` and `grname`. This is file [file.info()] for the package file.
 package_metadata <- function(package_files) {
-    metadata <- file.info(file.path(package_files))
+    metadata <- file.info(fs::path(package_files))
     package_basename <- basename(package_files)
-    rownames(metadata) <- file.path(basename_from_targz(package_basename), package_basename)
+    rownames(metadata) <- fs::path(package_name_from_filename(package_basename), package_basename)
 
     return(metadata)
 }

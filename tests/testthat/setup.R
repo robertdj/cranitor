@@ -1,3 +1,6 @@
+cran_root <- fs::path_temp("cranitor_test", "demo_cran")
+
+
 package_tbl <- tibble::tribble(
     ~package_name, ~version,
     "foo", "0.0.1",
@@ -14,8 +17,7 @@ src_package_paths <- purrr::pmap_chr(
 
 names(src_package_paths) <- package_names
 
-sysname <- tolower(Sys.info()[["sysname"]])
-if ("windows" %in% sysname || "mac" %in% sysname) {
+if (is_win_or_mac()) {
     bin_package_paths <- purrr::pmap_chr(
         package_tbl, create_empty_package,
         binary = TRUE, quiet = TRUE, dest_path = fs::path_temp()
@@ -23,3 +25,4 @@ if ("windows" %in% sysname || "mac" %in% sysname) {
 
     names(bin_package_paths) <- package_names
 }
+

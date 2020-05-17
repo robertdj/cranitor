@@ -14,14 +14,15 @@ Depends:
     R (>= 3.5)
 Imports:
     assertthat,
-    fs
+    fs,
+    purrr,
+    withr,
+    tidyr
 Suggests:
     here,
     pkgbuild,
     processx,
-    purrr,
     remotes,
     servr,
     testthat (>= 2.1.0),
-    tibble,
-    withr
+    tibble
