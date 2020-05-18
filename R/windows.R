@@ -5,14 +5,6 @@ update_cran_win <- function(cran_root, zip_file) {
         package_ext(zip_file) == "zip"
     )
 
-    desc <- get_package_desc(zip_file)
-    is_source_package <- is.na(desc["Built"])
-
-    if (isTRUE(is_source_package)) {
-        stop(zip_file, " is a source package")
-        return(invisible(NULL))
-    }
-
     meta <- get_package_meta(zip_file)
 
     if (tolower(meta$Built$OStype) != "windows")

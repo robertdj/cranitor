@@ -112,11 +112,12 @@ clean_cran_win <- function(cran_root, r_version) {
     if (length(non_zip_files) > 0)
         fs::file_delete(non_zip_files)
 
-    # TODO: Should baesname be here or in function?
+    # TODO: Should basename be here or in function?
     # TODO: Move archiving to new function
     package_names <- package_name_from_filename(basename(win_packages))
     packages_by_name <- split(win_packages, package_names)
 
+    # TODO: Use by?
     for (package_files in packages_by_name) {
         archive_win_single_package(cran_root, package_files)
     }
