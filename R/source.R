@@ -15,7 +15,7 @@ update_cran_source <- function(cran_root, targz_file) {
 
     import_source_package(cran_root, targz_file)
 
-    clean_cran(cran_root)
+    clean_cran_source(cran_root)
 
     tools::write_PACKAGES(source_package_dir(cran_root), type = "source")
 }
