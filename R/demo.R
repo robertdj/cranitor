@@ -4,7 +4,8 @@
 #' created in a temporary folder.
 #' @param packages A vector of file names for packages to be imported. If empty, a number of
 #' packages are made with [create_empty_package()].
-#' @param binary Import binary packages to the demo CRAN? Only accepted on Windows and macOS.
+#' @param binary Only relevant if `packages` is empty. Make binary packages in the demo CRAN? Only
+#' used on Windows and macOS.
 #'
 #' @return The folder `cran_root`
 #'

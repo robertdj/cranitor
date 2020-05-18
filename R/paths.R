@@ -17,8 +17,24 @@ source_package_dir <- function(cran_root) {
 #' The path of the Windows package folder
 #'
 #' @inheritParams update_cran
-win_package_dir <- function(cran_root) {
-    file.path(cran_root, "bin", "windows", "contrib", r_version())
+#' @param r_version An `R_system_version` -- the result of e.g. [getRversion()].
+win_package_dir <- function(cran_root, r_version = getRversion()) {
+    assertthat::assert_that(
+        inherits(r_version, "R_system_version")
+    )
+
+    fs::path(
+        cran_root, "bin", "windows", "contrib", paste0(r_version$major, ".", r_version$minor)
+    )
+}
+
+
+#' The path of the Mac package folder
+#'
+#' @inheritParams update_cran
+mac_package_dir <- function(cran_root) {
+    # TODO: macOS name?
+    fs::path(cran_root, "bin", "macosx", "contrib")
 }
 
 

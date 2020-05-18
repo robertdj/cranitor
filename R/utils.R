@@ -10,8 +10,7 @@ is_win_or_mac <- function() {
 
 
 package_ext <- function(package_file) {
-    # TODO: endsWith(package_file, "tar.gz")
-    if (grepl("\\.tar\\.gz$", package_file))
+    if (endsWith(package_file, ".tar.gz"))
         return("tar.gz")
 
     file_ext <- tools::file_ext(package_file)

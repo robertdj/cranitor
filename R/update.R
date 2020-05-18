@@ -73,32 +73,8 @@ get_file_in_archive <- function(archive, package_file) {
 }
 
 
-update_cran_win <- function(cran_root, zip_file) {
-    print("win")
-    desc <- get_package_desc(zip_file)
-    meta <- get_package_meta(zip_file)
-
-    import_win_package(cran_root, zip_file)
-
-    # TODO: basename_from_targz is not a good name
-    archive_windows_package(cran_root, basename_from_targz(zip_file))
-
-    tools::write_PACKAGES(win_package_dir(cran_root), type = "win.binary")
-}
-
-
-update_cran_mac <- function(cran_root, tgz_file) {
-    print("mac")
-}
-
-
-# TODO: This is basename_from_targz
 package_name_from_filename <- function(package_file) {
     # TODO: Make sure that we work on basename(package_file)
     package_file_sans_path <- basename(package_file)
     substr(package_file_sans_path, 1, regexpr("_", package_file_sans_path) - 1)
-
-    # sub("(^.*?)_", "\\1", basename(package_file))
-    # sub("(^[:alpha:].*?)_", "\\1", basename(package_file))
 }
-

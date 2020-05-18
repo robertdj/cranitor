@@ -7,8 +7,9 @@
 #' @export
 clean_cran <- function(cran_root) {
     clean_cran_source(cran_root)
-    clean_cran_win(cran_root)
-    clean_cran_mac(cran_root)
+    # TODO: Run win & mac for all versions
+    # clean_cran_win(cran_root)
+    # clean_cran_mac(cran_root)
 }
 
 
@@ -97,9 +98,45 @@ sort_files_by_version <- function(package_files) {
 
 
 
-clean_cran_win <- function(cran_root) {
-    if (isFALSE(fs::dir_exists(win_package_dir(cran_root))))
-        message("No Windows packages in ", cran_root)
+clean_cran_win <- function(cran_root, r_version) {
+    if (isFALSE(fs::dir_exists(win_package_dir(cran_root, r_version))))
+        message("No Windows packages for R version", r_version, " in ", cran_root)
+
+    win_packages <- fs::dir_ls(win_package_dir(cran_root, r_version), type = "file", glob = "*.zip")
+    all_files_in_win_dir <- fs::dir_ls(
+        win_package_dir(cran_root, r_version), type = "file", regexp = "^PACKAGES*", invert = TRUE
+    )
+
+    non_zip_files <- setdiff(all_files_in_win_dir, win_packages)
+    # TODO: Option to list files instead of deleting?
+    if (length(non_zip_files) > 0)
+        fs::file_delete(non_zip_files)
+
+    # TODO: Should baesname be here or in function?
+    # TODO: Move archiving to new function
+    package_names <- package_name_from_filename(basename(win_packages))
+    packages_by_name <- split(win_packages, package_names)
+
+    for (package_files in packages_by_name) {
+        archive_win_single_package(cran_root, package_files)
+    }
+
+    tools::write_PACKAGES(win_package_dir(cran_root, r_version), type = "win.binary")
+}
+
+
+archive_win_single_package <- function(cran_root, package_files) {
+    package_name <- unique(package_name_from_filename(package_files))
+    assertthat::assert_that(
+        assertthat::is.string(package_name)
+    )
+
+    if (length(package_files) <= 1)
+        return(invisible(NULL))
+
+    sorted_packages <- sort_files_by_version(package_files)
+
+    fs::file_delete(sorted_packages[-1])
 }
 
 
