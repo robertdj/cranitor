@@ -13,7 +13,8 @@ created in a temporary folder.}
 \item{packages}{A vector of file names for packages to be imported. If empty, a number of
 packages are made with \code{\link[=create_empty_package]{create_empty_package()}}.}
 
-\item{binary}{Import binary packages to the demo CRAN? Only accepted on Windows and macOS.}
+\item{binary}{Only relevant if \code{packages} is empty. Make binary packages in the demo CRAN? Only
+used on Windows and macOS.}
 }
 \value{
 The folder \code{cran_root}

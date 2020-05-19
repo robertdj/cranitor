@@ -4,7 +4,7 @@
 \alias{import_source_package}
 \title{Import source package}
 \usage{
-import_source_package(cran_root, package)
+import_source_package(cran_root, targz_file)
 }
 \arguments{
 \item{cran_root}{The folder containing the CRAN.}

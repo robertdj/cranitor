@@ -4,10 +4,12 @@
 \alias{win_package_dir}
 \title{The path of the Windows package folder}
 \usage{
-win_package_dir(cran_root)
+win_package_dir(cran_root, r_version = getRversion())
 }
 \arguments{
 \item{cran_root}{The folder containing the CRAN.}
+
+\item{r_version}{An \code{R_system_version} -- the result of e.g. \code{\link[=getRversion]{getRversion()}}.}
 }
 \description{
 The path of the Windows package folder

@@ -4,7 +4,7 @@
 \alias{import_win_package}
 \title{Import Windows package}
 \usage{
-import_win_package(cran_root, package)
+import_win_package(cran_root, package, r_version)
 }
 \arguments{
 \item{cran_root}{The folder containing the CRAN.}
