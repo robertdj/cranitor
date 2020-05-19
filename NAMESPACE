@@ -3,5 +3,4 @@
 export(clean_cran)
 export(create_empty_package)
 export(make_demo_cran)
-export(make_local_cran)
 export(update_cran)

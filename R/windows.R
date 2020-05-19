@@ -18,3 +18,15 @@ update_cran_win <- function(cran_root, zip_file) {
     tools::write_PACKAGES(win_package_dir(cran_root, r_version_used_in_build), type = "win.binary")
 }
 
+
+import_win_package <- function(cran_root, package, r_version) {
+    assertthat::assert_that(
+        assertthat::has_extension(package, "zip")
+    )
+
+    if (isFALSE(fs::dir_exists(win_package_dir(cran_root, r_version))))
+        fs::dir_create(win_package_dir(cran_root, r_version))
+
+    # TODO: copy or move?
+    fs::file_copy(package, win_package_dir(cran_root, r_version))
+}

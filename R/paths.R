@@ -1,11 +1,3 @@
-#' Get the R version
-#'
-#' Get the R version as `<major>.<minor>`.
-r_version <- function() {
-    paste(R.version$major, sub("\\..*$", "", R.version$minor), sep = ".")
-}
-
-
 #' The path of the source package folder
 #'
 #' @inheritParams update_cran

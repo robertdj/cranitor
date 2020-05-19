@@ -31,3 +31,8 @@ package_metadata <- function(package_files) {
 
     return(metadata)
 }
+
+
+archive_package_files <- function(cran_root) {
+    fs::dir_ls(archive_path(cran_root), recurse = 1, fail = FALSE, glob = "*.tar.gz")
+}
