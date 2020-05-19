@@ -16,8 +16,8 @@ Imports:
     assertthat,
     fs,
     purrr,
-    withr,
-    tidyr
+    tidyr,
+    withr
 Suggests:
     here,
     pkgbuild,

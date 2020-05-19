@@ -63,12 +63,16 @@ make_demo_cran <- function(cran_root = NULL, packages = character(0), binary = F
 #' @param version The version of the package
 #' @param ... Arguments for [pkgbuild::build()]
 #'
-#' @details The package consists of a `DESCRIPTION` file and a `NAMESPACE` file.
+#' @details The package consists of a `DESCRIPTION` file and a `NAMESPACE` file. Require the
+#' `pkgbuild` package installed.
 #'
 #' @return The path of the built package.
 #'
 #' @export
 create_empty_package <- function(package_name, version, ...) {
+    if (isFALSE(requireNamespace("pkgbuild", quietly = TRUE)))
+        stop("pkgbuild is required")
+
     package_path <- fs::path(tempdir(), package_name)
     fs::dir_create(package_path)
     withr::defer(fs::dir_delete(package_path))
