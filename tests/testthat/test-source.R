@@ -27,6 +27,7 @@ test_that("Update CRAN with source package", {
     # cran_files <- fs::dir_ls(cran_root, type = "file", recurse = TRUE)
     cran_files <- list.files(fs::path(cran_root, "src", "contrib"), recursive = TRUE)
 
+    # The order of cran_files depend on the OS
     expect_length(cran_files, 4L)
 
     expect_true(basename(src_package_paths[1]) %in% cran_files)

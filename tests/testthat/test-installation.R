@@ -1,7 +1,7 @@
-cran_root <- make_demo_cran()
+# Setup ---------------------------------------------------------------------------------------
 
-test_library <- fs::path(tempdir(), "r_test_library")
-fs::dir_create(test_library)
+make_demo_cran(cran_root, packages = package_paths)
+withr::defer(fs::dir_delete(cran_root))
 
 cran_port <- servr::random_port()
 cran_url <- paste0("http://localhost:", cran_port)
@@ -17,6 +17,8 @@ p <- processx::process$new(
 Sys.sleep(1)
 
 
+# Tests ---------------------------------------------------------------------------------------
+
 test_that("CRAN lists available packages", {
     demo_cran_packages <- available.packages(repos = cran_url)
 
@@ -31,6 +33,8 @@ test_that("CRAN lists available packages", {
 
 
 test_that("Install source package from hosted CRAN", {
+    test_library <- make_test_library()
+
     test_library_packages <- installed.packages(lib.loc = test_library)
     expect_equal(nrow(test_library_packages), 0)
 
@@ -46,6 +50,8 @@ test_that("Install source package from hosted CRAN", {
 
 
 test_that("Install archived versions of package from hosted CRAN", {
+    test_library <- make_test_library()
+
     remotes::install_version(
         "foo", version = "0.0.1", lib = test_library, repos = cran_url, quiet = TRUE
     )
@@ -56,19 +62,26 @@ test_that("Install archived versions of package from hosted CRAN", {
 })
 
 
-test_that("Install Windows package from hosted CRAN", {
-    skip_on_os(c("linux", "mac", "solaris"))
+test_that("Install binary package from hosted CRAN", {
+    skip_on_os(c("linux", "solaris"))
 
+    test_library <- make_test_library()
+
+    test_library_packages <- installed.packages(lib.loc = test_library)
+    expect_equal(nrow(test_library_packages), 0)
+
+    install.packages(
+        "foo", lib = test_library, repos = cran_url, type = "binary", quiet = TRUE
+    )
+
+    test_library_packages <- installed.packages(lib.loc = test_library)
+    expect_equal(rownames(test_library_packages), c(Package = "foo"))
+    expect_equal(test_library_packages[, "Package"], "foo")
+    expect_equal(test_library_packages[, "Version"], "0.0.2")
 })
 
-
-test_that("Install macOS package from hosted CRAN", {
-    skip_on_os(c("linux", "solaris", "windows"))
-
-})
 
 p$kill()
 # print(p)
 
 unlink(cran_root, recursive = TRUE)
-unlink(test_library, recursive = TRUE)

@@ -18,6 +18,7 @@ src_package_paths <- purrr::pmap_chr(
 )
 
 names(src_package_paths) <- package_names
+package_paths <- src_package_paths
 
 
 # Binary --------------------------------------------------------------------------------------
@@ -29,5 +30,7 @@ if (is_win_or_mac()) {
     )
 
     names(bin_package_paths) <- package_names
+
+    package_paths <- c(package_paths, bin_package_paths)
 }
 
