@@ -16,7 +16,6 @@ make_demo_cran <- function(cran_root = NULL, packages = character(0), binary = F
 
     assertthat::assert_that(
         assertthat::is.string(cran_root),
-        # fs::is_dir(cran_root),
         is.character(packages),
         assertthat::is.flag(binary)
     )
@@ -24,8 +23,6 @@ make_demo_cran <- function(cran_root = NULL, packages = character(0), binary = F
     if (dir.exists(cran_root)) {
         stop(cran_root, " already exists.")
     }
-
-    # make_local_cran(cran_root)
 
     if (length(packages) == 0) {
         # TODO: Replace purrr with Map or mapply
@@ -63,11 +60,15 @@ make_demo_cran <- function(cran_root = NULL, packages = character(0), binary = F
 #' @param ... Arguments for [pkgbuild::build()]
 #'
 #' @details The package consists of a `DESCRIPTION` file and a `NAMESPACE` file.
+#' Note that the `pkgbuild` package is required.
 #'
 #' @return The path of the built package.
 #'
 #' @export
 create_empty_package <- function(package_name, version, ...) {
+    if (!is_installed("pkgbuild"))
+        stop("'create_empty_package' requires pkgbuild")
+
     package_path <- fs::path(tempdir(), package_name)
     fs::dir_create(package_path)
     withr::defer(fs::dir_delete(package_path))
@@ -92,4 +93,3 @@ create_empty_package <- function(package_name, version, ...) {
 
     pkgbuild::build(path = package_path, ...)
 }
-

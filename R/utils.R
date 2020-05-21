@@ -19,3 +19,8 @@ package_ext <- function(package_file) {
 
     stop("'", file_ext, "' is not a valid package file extention")
 }
+
+
+is_installed <- function(pkg) {
+    isTRUE(requireNamespace(pkg, quietly = TRUE))
+}
