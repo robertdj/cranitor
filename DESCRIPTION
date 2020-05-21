@@ -18,7 +18,6 @@ Imports:
     purrr,
     withr
 Suggests:
-    here,
     pkgbuild,
     processx,
     remotes,
