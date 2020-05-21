@@ -33,13 +33,12 @@ make_demo_cran <- function(cran_root = NULL, packages = character(0), binary = F
             binary <- FALSE
         }
 
-        # TODO: Get all combinations of names and `binary` with expand.grid
-        package_params <- tidyr::crossing(
+        package_params <- merge(
             data.frame(
                 package_name = c("foo", "foo", "bar"),
                 version = c("0.0.1", "0.0.2", "0.0.1")
             ),
-            binary = binary
+            as.data.frame(binary)
         )
 
         packages <- purrr::pmap_chr(package_params, create_empty_package, quiet = TRUE)

@@ -16,7 +16,6 @@ Imports:
     assertthat,
     fs,
     purrr,
-    tidyr,
     withr
 Suggests:
     here,
