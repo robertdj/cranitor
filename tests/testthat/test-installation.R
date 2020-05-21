@@ -19,7 +19,7 @@ Sys.sleep(1)
 
 # Tests ---------------------------------------------------------------------------------------
 
-test_that("CRAN lists available packages", {
+test_that("List available packages in CRAN", {
     demo_cran_packages <- available.packages(repos = cran_url)
 
     expect_type(demo_cran_packages, "character")
@@ -84,4 +84,5 @@ test_that("Install binary package from hosted CRAN", {
 p$kill()
 # print(p)
 
-unlink(cran_root, recursive = TRUE)
+# unlink(cran_root, recursive = TRUE)
+

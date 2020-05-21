@@ -21,6 +21,20 @@ win_package_dir <- function(cran_root, r_version = getRversion()) {
 }
 
 
+list_win_package_dirs <- function(cran_root) {
+    # TODO: Not so elegant with dirname
+    win_dir <- dirname(win_package_dir(cran_root))
+
+    if (isFALSE(fs::dir_exists(win_dir)))
+        return(list())
+
+    win_versions_as_strings <- basename(fs::dir_ls(win_dir, type = "dir"))
+
+    R_system_version(paste(win_versions_as_strings, "0", sep = "."))
+}
+
+
+
 #' The path of the Mac package folder
 #'
 #' @inheritParams update_cran
@@ -48,3 +62,4 @@ archive_metadata_path <- function(cran_root) {
 archive_path <- function(cran_root) {
     fs::path(source_package_dir(cran_root), "Archive")
 }
+

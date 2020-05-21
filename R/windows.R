@@ -13,7 +13,7 @@ update_cran_win <- function(cran_root, zip_file) {
     r_version_used_in_build <- meta$Built$R
     import_win_package(cran_root, zip_file, r_version_used_in_build)
 
-    clean_cran_win(cran_root, r_version_used_in_build)
+    clean_cran_win(cran_root)
 
     tools::write_PACKAGES(win_package_dir(cran_root, r_version_used_in_build), type = "win.binary")
 }
@@ -30,3 +30,4 @@ import_win_package <- function(cran_root, package, r_version) {
     # TODO: copy or move?
     fs::file_copy(package, win_package_dir(cran_root, r_version))
 }
+

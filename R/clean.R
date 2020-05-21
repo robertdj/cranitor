@@ -7,15 +7,14 @@
 #' @export
 clean_cran <- function(cran_root) {
     clean_cran_source(cran_root)
-    # TODO: Run win & mac for all versions
-    # clean_cran_win(cran_root)
+    clean_cran_win(cran_root)
     # clean_cran_mac(cran_root)
 }
 
 
 clean_cran_source <- function(cran_root) {
     if (isFALSE(fs::dir_exists(source_package_dir(cran_root))))
-        message("No source packages in ", cran_root)
+        return(invisible(NULL))
 
     source_packages <- fs::dir_ls(source_package_dir(cran_root), type = "file", glob = "*.tar.gz")
     all_files_in_source_dir <- fs::dir_ls(source_package_dir(cran_root), type = "file", regexp = "^PACKAGES*", invert = TRUE)
@@ -97,8 +96,15 @@ sort_files_by_version <- function(package_files) {
 }
 
 
+clean_cran_win <- function(cran_root) {
+    win_versions <- list_win_package_dirs(cran_root)
+    for (version in as.list(win_versions)) {
+        clean_cran_win_single_version(cran_root, version)
+    }
+}
 
-clean_cran_win <- function(cran_root, r_version) {
+
+clean_cran_win_single_version <- function(cran_root, r_version) {
     if (isFALSE(fs::dir_exists(win_package_dir(cran_root, r_version))))
         message("No Windows packages for R version", r_version, " in ", cran_root)
 
@@ -145,3 +151,4 @@ clean_cran_mac <- function(cran_root) {
     if (isFALSE(fs::dir_exists(mac_package_dir(cran_root))))
         message("No source packages in ", cran_root)
 }
+

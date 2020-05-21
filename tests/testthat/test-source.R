@@ -25,7 +25,7 @@ test_that("Update CRAN with source package", {
     update_cran_source(cran_root, src_package_paths[1])
 
     # cran_files <- fs::dir_ls(cran_root, type = "file", recurse = TRUE)
-    cran_files <- list.files(fs::path(cran_root, "src", "contrib"), recursive = TRUE)
+    cran_files <- list.files(source_package_dir(cran_root), recursive = TRUE)
 
     # The order of cran_files depend on the OS
     expect_length(cran_files, 4L)
@@ -40,10 +40,10 @@ test_that("Update CRAN with source package", {
 test_that("Update CRAN with new version of source package", {
     clean_test_cran(cran_root)
 
-    f1 <- src_package_paths[1]
+    f1 <- src_package_paths["foo_0.0.1"]
     update_cran_source(cran_root, f1)
 
-    f2 <- src_package_paths[2]
+    f2 <- src_package_paths["foo_0.0.2"]
     update_cran_source(cran_root, f2)
 
     # cran_files <- fs::dir_ls(cran_root, type = "file", recurse = TRUE)
@@ -62,9 +62,8 @@ test_that("Update CRAN with new version of source package", {
 
 
 test_that("Unexpected files are deleted from CRAN", {
-    clean_test_cran(cran_root)
-
-    make_demo_cran(cran_root, packages = src_package_paths)
+    cran_root <- make_demo_cran(packages = src_package_paths)
+    withr::defer(fs::dir_delete(cran_root))
 
     unwanted_file <- fs::path(source_package_dir(cran_root), "random_file")
     fs::file_create(unwanted_file)
@@ -73,3 +72,4 @@ test_that("Unexpected files are deleted from CRAN", {
     clean_cran_source(cran_root)
     expect_false(fs::file_exists(unwanted_file))
 })
+
