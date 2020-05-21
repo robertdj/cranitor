@@ -23,5 +23,4 @@ Suggests:
     processx,
     remotes,
     servr,
-    testthat (>= 2.1.0),
-    tibble
+    testthat (>= 2.1.0)

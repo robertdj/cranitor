@@ -3,11 +3,9 @@ cran_root <- fs::path_temp("cranitor_test", "demo_cran")
 
 # Source --------------------------------------------------------------------------------------
 
-package_tbl <- tibble::tribble(
-    ~package_name, ~version,
-    "foo", "0.0.1",
-    "foo", "0.0.2",
-    "bar", "0.0.1",
+package_tbl <- data.frame(
+    package_name = c("foo", "foo", "bar"),
+    version = c("0.0.1", "0.0.2", "0.0.1")
 )
 
 package_names <- do.call(paste, c(package_tbl, sep = "_"))
