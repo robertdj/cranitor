@@ -12,7 +12,7 @@
 #' @export
 make_demo_cran <- function(cran_root = NULL, packages = character(0), binary = FALSE) {
     if (is.null(cran_root))
-        cran_root <- fs::path(fs::path_temp(), "demo_cran")
+        cran_root <- fs::path_temp("demo_cran", strftime(Sys.time(), format = "%Y-%m-%d_%H-%M-%S"))
 
     assertthat::assert_that(
         assertthat::is.string(cran_root),
@@ -22,8 +22,7 @@ make_demo_cran <- function(cran_root = NULL, packages = character(0), binary = F
     )
 
     if (dir.exists(cran_root)) {
-        warning(cran_root, " already exists. It is now replaced.")
-        fs::dir_delete(cran_root)
+        stop(cran_root, " already exists.")
     }
 
     # make_local_cran(cran_root)
@@ -63,16 +62,12 @@ make_demo_cran <- function(cran_root = NULL, packages = character(0), binary = F
 #' @param version The version of the package
 #' @param ... Arguments for [pkgbuild::build()]
 #'
-#' @details The package consists of a `DESCRIPTION` file and a `NAMESPACE` file. Require the
-#' `pkgbuild` package installed.
+#' @details The package consists of a `DESCRIPTION` file and a `NAMESPACE` file.
 #'
 #' @return The path of the built package.
 #'
 #' @export
 create_empty_package <- function(package_name, version, ...) {
-    if (isFALSE(requireNamespace("pkgbuild", quietly = TRUE)))
-        stop("pkgbuild is required")
-
     package_path <- fs::path(tempdir(), package_name)
     fs::dir_create(package_path)
     withr::defer(fs::dir_delete(package_path))
@@ -97,3 +92,4 @@ create_empty_package <- function(package_name, version, ...) {
 
     pkgbuild::build(path = package_path, ...)
 }
+
