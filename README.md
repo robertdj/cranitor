@@ -35,25 +35,24 @@ I have no experience trying to publish a package to CRAN, but let me know if I s
 
 # Usage
 
-A demo CRAN can be made that import a few "empty packages":
+A demo CRAN can be made that create and import a few "empty packages":
 
 ```
-library(cranitor)
-make_demo_cran("path/to/cran")
+cran_root <- cranitor::make_demo_cran("path/to/cran")
 ```
 
-An R package can be compressed into a `tar.gz` file using `R CMD build` from the command line or the [devtools package](https://github.com/r-lib/devtools) inside the corresponding project:
+The empty packages are created with `create_empty_package`.
+
+Alternatively, a vector of filenames with paths to package files can be supplied to `make_demo_cran`.
+Package files can be made from a project with `devtools::build` or downloaded from another CRAN.
+
+To create/update a local CRAN with a new package file the `update_cran` function is available:
 
 ```
-targz_file <- devtools::build()
+cranitor::update_cran(cran_root, package_file)
 ```
 
-The created `tar.gz` file can be imported into a CRAN:
+*cranitor* figures out where the `package_file` should go in the CRAN and update metadata.
 
-```
-update_cran("path/to/cran", targz_file)
-```
+If a CRAN is a mess (I have typically seen unwanted files scattered in different folders), the function `clean_cran` can help out.
 
-A third, optional argument is a `zip` file with a *binary* version of the package made with `devtools::build(binary = TRUE)`. This is very handy if you use Windows -- especially if the package contains compiled code.
-
-The `update_cran` function archives old versions of the package and updates the metadata.

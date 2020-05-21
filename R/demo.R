@@ -2,48 +2,72 @@
 #'
 #' @param cran_root The folder containing the demo CRAN. If `NULL`, the folder `demo_cran` will be
 #' created in a temporary folder.
+#' @param packages A vector of file names for packages to be imported. If empty, a number of
+#' packages are made with [create_empty_package()].
+#' @param binary Only relevant if `packages` is empty. Make binary packages in the demo CRAN? Only
+#' used on Windows and macOS.
 #'
 #' @return The folder `cran_root`
 #'
 #' @export
-make_demo_cran <- function(cran_root = NULL) {
+make_demo_cran <- function(cran_root = NULL, packages = character(0), binary = FALSE) {
     if (is.null(cran_root))
-        cran_root <- fs::path(fs::path_temp(), "demo_cran")
+        cran_root <- fs::path_temp("demo_cran", strftime(Sys.time(), format = "%Y-%m-%d_%H-%M-%S"))
+
+    assertthat::assert_that(
+        assertthat::is.string(cran_root),
+        is.character(packages),
+        assertthat::is.flag(binary)
+    )
 
     if (dir.exists(cran_root)) {
-        warning(cran_root, " already exists. It is now replaced.")
-        unlink(cran_root, recursive = TRUE)
+        stop(cran_root, " already exists.")
     }
 
-    make_local_cran(cran_root)
+    if (length(packages) == 0) {
+        # TODO: Replace purrr with Map or mapply
 
-    import_source_package(cran_root, create_empty_package("foo", "0.0.1", quiet = TRUE))
-    import_source_package(cran_root, create_empty_package("foo", "0.0.2", quiet = TRUE))
-    import_source_package(cran_root, create_empty_package("bar", "0.0.1", quiet = TRUE))
+        if (isTRUE(binary) && is_win_or_mac()) {
+            binary <- c(TRUE, FALSE)
+        } else {
+            binary <- FALSE
+        }
 
-    archive_package(cran_root, "foo")
-    archive_package(cran_root, "bar")
+        package_params <- merge(
+            data.frame(
+                package_name = c("foo", "foo", "bar"),
+                version = c("0.0.1", "0.0.2", "0.0.1")
+            ),
+            as.data.frame(binary)
+        )
 
-    make_archive_metadata(cran_root)
+        packages <- purrr::pmap_chr(package_params, create_empty_package, quiet = TRUE)
+    }
 
-    tools::write_PACKAGES(source_package_dir(cran_root), type = "source")
+    purrr::walk2(cran_root, packages, update_cran)
+
+    clean_cran(cran_root)
 
     return(cran_root)
 }
 
 
-#' Make a demo package
+#' Make an empty package
 #'
 #' @param package_name The name of the package
 #' @param version The version of the package
 #' @param ... Arguments for [pkgbuild::build()]
 #'
-#' @details The demo package consists of a `DESCRIPTION` file and a `NAMESPACE` file.
+#' @details The package consists of a `DESCRIPTION` file and a `NAMESPACE` file.
+#' Note that the `pkgbuild` package is required.
 #'
 #' @return The path of the built package.
 #'
 #' @export
 create_empty_package <- function(package_name, version, ...) {
+    if (!rlang::is_installed("pkgbuild"))
+        stop("'create_empty_package' requires pkgbuild")
+
     package_path <- fs::path(tempdir(), package_name)
     fs::dir_create(package_path)
     withr::defer(fs::dir_delete(package_path))

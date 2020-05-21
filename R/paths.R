@@ -1,42 +1,45 @@
-#' Get the R version
-#'
-#' Get the R version as `<major>.<minor>`.
-r_version <- function() {
-    paste(R.version$major, sub("\\..*$", "", R.version$minor), sep = ".")
-}
-
-
-#' The path of the source package folder
-#'
-#' @inheritParams update_cran
 source_package_dir <- function(cran_root) {
-    file.path(cran_root, "src", "contrib")
+    fs::path(cran_root, "src", "contrib")
 }
 
 
-#' The path of the Windows package folder
-#'
-#' @inheritParams update_cran
-win_package_dir <- function(cran_root) {
-    file.path(cran_root, "bin", "windows", "contrib", r_version())
+win_package_dir <- function(cran_root, r_version = getRversion()) {
+    assertthat::assert_that(
+        inherits(r_version, "R_system_version")
+    )
+
+    fs::path(
+        cran_root, "bin", "windows", "contrib", paste0(r_version$major, ".", r_version$minor)
+    )
 }
 
 
-#' The path of the archive metadata
-#'
-#' @inheritParams update_cran
-#'
-#' @return The path of `archive.rds` relative to `cran_root`
+list_win_package_dirs <- function(cran_root) {
+    # TODO: Not so elegant with dirname
+    win_dir <- dirname(win_package_dir(cran_root))
+
+    if (isFALSE(fs::dir_exists(win_dir)))
+        return(list())
+
+    win_versions_as_strings <- basename(fs::dir_ls(win_dir, type = "dir"))
+
+    R_system_version(paste(win_versions_as_strings, "0", sep = "."))
+}
+
+
+
+mac_package_dir <- function(cran_root) {
+    # TODO: macOS name?
+    fs::path(cran_root, "bin", "macosx", "contrib")
+}
+
+
 archive_metadata_path <- function(cran_root) {
-    file.path(source_package_dir(cran_root), "Meta", "archive.rds")
+    fs::path(source_package_dir(cran_root), "Meta", "archive.rds")
 }
 
 
-#' The path of the Archive folder
-#'
-#' @inheritParams update_cran
-#'
-#' @return The path of the `Archive` folder relative to `cran_root`
 archive_path <- function(cran_root) {
-    file.path(source_package_dir(cran_root), "Archive")
+    fs::path(source_package_dir(cran_root), "Archive")
 }
+

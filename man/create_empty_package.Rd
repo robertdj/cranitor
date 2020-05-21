@@ -2,7 +2,7 @@
 % Please edit documentation in R/demo.R
 \name{create_empty_package}
 \alias{create_empty_package}
-\title{Make a demo package}
+\title{Make an empty package}
 \usage{
 create_empty_package(package_name, version, ...)
 }
@@ -17,8 +17,9 @@ create_empty_package(package_name, version, ...)
 The path of the built package.
 }
 \description{
-Make a demo package
+Make an empty package
 }
 \details{
-The demo package consists of a \code{DESCRIPTION} file and a \code{NAMESPACE} file.
+The package consists of a \code{DESCRIPTION} file and a \code{NAMESPACE} file.
+Note that the \code{pkgbuild} package is required.
 }
