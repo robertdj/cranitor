@@ -21,4 +21,5 @@ Make an empty package
 }
 \details{
 The package consists of a \code{DESCRIPTION} file and a \code{NAMESPACE} file.
+Note that the \code{pkgbuild} package is required.
 }
