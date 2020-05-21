@@ -65,7 +65,7 @@ make_demo_cran <- function(cran_root = NULL, packages = character(0), binary = F
 #'
 #' @export
 create_empty_package <- function(package_name, version, ...) {
-    if (!is_installed("pkgbuild"))
+    if (!rlang::is_installed("pkgbuild"))
         stop("'create_empty_package' requires pkgbuild")
 
     package_path <- fs::path(tempdir(), package_name)

@@ -16,6 +16,7 @@ Imports:
     assertthat,
     fs,
     purrr,
+    rlang,
     withr
 Suggests:
     pkgbuild,
