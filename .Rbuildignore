@@ -1,7 +1,5 @@
 ^cranitor\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
-^data-raw$
 ^README\.md$
-^\.travis\.yml$
-^appveyor\.yml$
+^\.github$

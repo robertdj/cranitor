@@ -2,8 +2,7 @@ cranitor
 ========
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.org/robertdj/cranitor.svg?branch=master)](https://travis-ci.org/robertdj/cranitor)
-[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/robertdj/cranitor?branch=master&svg=true)](https://ci.appveyor.com/project/robertdj/cranitor)
+[![R build status](https://github.com/robertdj/cranitor/workflows/R-CMD-check/badge.svg)](https://github.com/robertdj/cranitor/actions)
 <!-- badges: end -->
 
 
@@ -35,6 +34,15 @@ I have no experience trying to publish a package to CRAN, but let me know if I s
 
 # Usage
 
+To create/update a local CRAN with a new package file the `update_cran` function is available:
+
+```
+cranitor::update_cran(cran_root, package_file)
+```
+
+The `package_file` can be `tar.gz` file (with the source of a package) or a `zip` file (a binary version of package suitable for Windows).
+*cranitor* figures out where the `package_file` should go in the CRAN and updates metadata.
+
 A demo CRAN can be made that create and import a few "empty packages":
 
 ```
@@ -46,13 +54,11 @@ The empty packages are created with `create_empty_package`.
 Alternatively, a vector of filenames with paths to package files can be supplied to `make_demo_cran`.
 Package files can be made from a project with `devtools::build` or downloaded from another CRAN.
 
-To create/update a local CRAN with a new package file the `update_cran` function is available:
-
-```
-cranitor::update_cran(cran_root, package_file)
-```
-
-*cranitor* figures out where the `package_file` should go in the CRAN and update metadata.
-
 If a CRAN is a mess (I have typically seen unwanted files scattered in different folders), the function `clean_cran` can help out.
+
+
+# macOS
+
+Unfortunately, I don't have access to a contemporary Mac, making it very difficult to debug on this platform.
+Therefore, there is only *very* rudimentary support for `tgz` files (a binary version suitable for macOS).
 

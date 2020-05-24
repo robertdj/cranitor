@@ -63,7 +63,7 @@ test_that("Install archived versions of package from hosted CRAN", {
 
 
 test_that("Install binary package from hosted CRAN", {
-    skip_on_os(c("linux", "solaris"))
+    skip_on_os(c("linux", "mac", "solaris"))
 
     test_library <- make_test_library()
 
