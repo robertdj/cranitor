@@ -48,9 +48,9 @@ get_package_meta <- function(archive) {
 
 get_file_in_archive <- function(archive, package_file) {
     if (package_ext(archive) == "zip") {
-        extractor <- unzip
+        extractor <- utils::unzip
     } else {
-        extractor <- untar
+        extractor <- utils::untar
     }
 
     tmp_dir <- fs::path_temp(package_file)
