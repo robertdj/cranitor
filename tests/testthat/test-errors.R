@@ -15,18 +15,19 @@ test_that("Import non-package archive", {
 
 
 test_that("Import archive with corrupted DESCRIPTION", {
-    wd <- getwd()
-    withr::defer(setwd(wd))
-
     tmp_dir <- fs::path_temp()
     fs::dir_create(fs::path(tmp_dir, "foo"))
     tmp_file <- fs::file_create(fs::path(tmp_dir, "foo", "DESCRIPTION"))
     writeLines("foobar", con = tmp_file)
 
-    setwd(tmp_dir)
     targz_file <-  fs::file_temp(pattern = "foo_", ext = "tar.gz")
-    # utils::tar(tarfile = targz_file, files = tmp_file, compression = "gzip")
-    utils::tar(tarfile = targz_file, files = fs::path("foo", "DESCRIPTION"), compression = "gzip", compression_level = 9L, tar = "tar")
+    withr::with_dir(
+        tmp_dir,
+        utils::tar(
+            tarfile = targz_file, files = fs::path("foo", "DESCRIPTION"),
+            compression = "gzip", compression_level = 9L, tar = "tar"
+        )
+    )
 
     fs::dir_delete(fs::path(tmp_dir, "foo"))
     expect_error(
