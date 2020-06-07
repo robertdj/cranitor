@@ -18,7 +18,3 @@ package_ext <- function(package_file) {
 
     match.arg(file_ext, c("tar.gz", "tgz", "zip"))
 }
-
-
-    stop("'", file_ext, "' is not a valid package file extention")
-}
