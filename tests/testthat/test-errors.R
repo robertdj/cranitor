@@ -1,33 +1,35 @@
-test_that("Import non-package archive", {
+make_baz_archive <- function(tmp_file) {
     withr::with_tempdir({
-        tmp_file <- basename(fs::file_temp())
-        writeLines("foobar\n", con = tmp_file)
-        targz_file <-  fs::file_temp(pattern = "foo_", ext = "tar.gz")
+        withr::defer(fs::dir_delete("baz"))
+        fs::dir_create("baz")
+
+        writeLines("foobar", con = fs::path("baz", tmp_file))
+
+        targz_file <-  fs::path_temp("baz_0.0.1.tar.gz")
+        withr::defer_parent(fs::file_delete(targz_file))
 
         utils::tar(
-            tarfile = targz_file, files = tmp_file,
+            tarfile = targz_file, files = fs::path("baz", tmp_file),
             compression = "gzip", compression_level = 9L, tar = "tar"
         )
     })
 
+    return(targz_file)
+}
+
+
+test_that("Import non-package archive", {
+    targz_file <- make_baz_archive(basename(fs::file_temp()))
+
     expect_error(
         update_cran(fs::path_temp("demo_cran"), targz_file),
-        "foo/DESCRIPTION does not exist"
+        "baz/DESCRIPTION does not exist"
     )
 })
 
 
 test_that("Import archive with corrupted DESCRIPTION", {
-    withr::with_tempdir({
-        fs::dir_create("foo")
-        writeLines("foobar", con = fs::path("foo", "DESCRIPTION"))
-        targz_file <-  fs::file_temp(pattern = "foo_", ext = "tar.gz")
-
-        utils::tar(
-            tarfile = targz_file, files = fs::path("foo", "DESCRIPTION"),
-            compression = "gzip", compression_level = 9L, tar = "tar"
-        )
-    })
+    targz_file <- make_baz_archive("DESCRIPTION")
 
     expect_error(
         update_cran(fs::path_temp("demo_cran"), targz_file),
