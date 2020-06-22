@@ -11,8 +11,8 @@ update_cran <- function(cran_root, package_file) {
     switch(
         package_ext(package_file),
         "tar.gz" = update_cran_source(cran_root, package_file),
-        "zip"    = update_cran_win(cran_root, package_file),
-        "tgz"    = update_cran_mac(cran_port, package_file)
+        "zip"    = update_cran_win(cran_root, package_file)
+        # "tgz"    = update_cran_mac(cran_root, package_file)
     )
 }
 

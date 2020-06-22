@@ -10,12 +10,11 @@ is_win_or_mac <- function() {
 
 
 package_ext <- function(package_file) {
-    if (endsWith(package_file, ".tar.gz"))
-        return("tar.gz")
+    if (endsWith(package_file, ".tar.gz")) {
+        file_ext <- "tar.gz"
+    } else {
+        file_ext <- tools::file_ext(package_file)
+    }
 
-    file_ext <- tools::file_ext(package_file)
-    if (file_ext %in% c("tgz", "zip"))
-        return(file_ext)
-
-    stop("'", file_ext, "' is not a valid package file extention")
+    match.arg(file_ext, c("tar.gz", "tgz", "zip"))
 }
