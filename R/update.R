@@ -58,7 +58,7 @@ get_file_in_archive <- function(archive, package_file) {
     tmp_dir <- fs::path_temp(package_file)
     withr::defer_parent(fs::dir_delete(tmp_dir))
 
-    # TODO: Consider just extracting the file in a tryCatch
+    # Running "untar" in a tryCatch is noisy if system tar has warnings/errors
     files_in_archive <- extractor(archive, list = TRUE)
     if (package_ext(archive) == "zip")
         files_in_archive <- files_in_archive$Name
