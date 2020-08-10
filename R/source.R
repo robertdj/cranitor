@@ -1,7 +1,7 @@
 update_cran_source <- function(cran_root, targz_file) {
     assertthat::assert_that(
         assertthat::is.string(cran_root),
-        assertthat::is.string(targz_file),
+        fs::is_file(targz_file),
         package_ext(targz_file) == "tar.gz"
     )
 
@@ -9,7 +9,7 @@ update_cran_source <- function(cran_root, targz_file) {
     is_source_package <- is.na(desc["Built"])
 
     if (isFALSE(is_source_package)) {
-        warning("Linux binary packages are not supported")
+        warning("Binary Linux packages are not supported")
         return(NULL)
     }
 
@@ -23,6 +23,7 @@ update_cran_source <- function(cran_root, targz_file) {
 
 import_source_package <- function(cran_root, targz_file) {
     assertthat::assert_that(
+        fs::is_file(targz_file),
         package_ext(targz_file) == "tar.gz"
     )
 
