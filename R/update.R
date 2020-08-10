@@ -49,8 +49,10 @@ get_package_meta <- function(archive) {
 get_file_in_archive <- function(archive, package_file) {
     if (package_ext(archive) == "zip") {
         extractor <- utils::unzip
-    } else {
+    } else if (package_ext(archive) %in% c("tgz", "tar.gz")) {
         extractor <- utils::untar
+    } else {
+        rlang::abort("Unknown archive extension")
     }
 
     tmp_dir <- fs::path_temp(package_file)
@@ -58,13 +60,10 @@ get_file_in_archive <- function(archive, package_file) {
 
     # TODO: Consider just extracting the file in a tryCatch
     files_in_archive <- extractor(archive, list = TRUE)
-    # unzip returns a dataframe. untar returns a vector
-    if (is.data.frame(files_in_archive))
+    if (package_ext(archive) == "zip")
         files_in_archive <- files_in_archive$Name
 
-    file_exists_in_archive <- any(package_file == files_in_archive)
-
-    if (isFALSE(file_exists_in_archive))
+    if (!(package_file %in% files_in_archive))
         stop(package_file, " does not exist in ", archive)
 
     extractor(archive, files = package_file, exdir = tmp_dir)
