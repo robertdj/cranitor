@@ -56,7 +56,7 @@ test_that("Update CRAN with new version of source package", {
     expect_true("PACKAGES.rds" %in% cran_files)
     expect_true("Meta/archive.rds" %in% cran_files)
     expect_true(
-        fs::path("Archive", package_name_from_filename(basename(f1)), basename(f1)) %in% cran_files
+        fs::path("Archive", package_name_from_filename(f1), basename(f1)) %in% cran_files
     )
 })
 

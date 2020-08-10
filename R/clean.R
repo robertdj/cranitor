@@ -26,7 +26,7 @@ clean_cran_source <- function(cran_root) {
 
     # TODO: Should baesname be here or in function?
     # TODO: Move archiving to new function
-    package_names <- package_name_from_filename(basename(source_packages))
+    package_names <- package_name_from_filename(source_packages)
     packages_by_name <- split(source_packages, package_names)
 
     for (package_files in packages_by_name) {
@@ -120,7 +120,7 @@ clean_cran_win_single_version <- function(cran_root, r_version) {
 
     # TODO: Should basename be here or in function?
     # TODO: Move archiving to new function
-    package_names <- package_name_from_filename(basename(win_packages))
+    package_names <- package_name_from_filename(win_packages)
     packages_by_name <- split(win_packages, package_names)
 
     # TODO: Use by?

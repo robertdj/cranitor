@@ -19,7 +19,7 @@ update_cran <- function(cran_root, package_file) {
 
 
 get_package_desc <- function(archive) {
-    package_name <- package_name_from_filename(basename(archive))
+    package_name <- package_name_from_filename(archive)
 
     desc_file <- get_file_in_archive(archive, fs::path(package_name, "DESCRIPTION"))
 
@@ -33,7 +33,7 @@ get_package_desc <- function(archive) {
 
 
 get_package_meta <- function(archive) {
-    package_name <- package_name_from_filename(basename(archive))
+    package_name <- package_name_from_filename(archive)
 
     meta_file <- get_file_in_archive(archive, fs::path(package_name, "Meta", "package.rds"))
 
@@ -73,7 +73,6 @@ get_file_in_archive <- function(archive, package_file) {
 
 
 package_name_from_filename <- function(package_file) {
-    # TODO: Make sure that we work on basename(package_file)
     package_file_sans_path <- basename(package_file)
     substr(package_file_sans_path, 1, regexpr("_", package_file_sans_path) - 1)
 }
