@@ -10,5 +10,5 @@ clean_cran(cran_root)
 \item{cran_root}{The folder containing the CRAN.}
 }
 \description{
-Clean a CRAN by archiving as needed for each platform and removing unncessary flies.
+Clean a CRAN by archiving as needed for each platform and removing unnecessary flies.
 }

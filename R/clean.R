@@ -1,6 +1,6 @@
 #' Clean a CRAN
 #'
-#' Clean a CRAN by archiving as needed for each platform and removing unncessary flies.
+#' Clean a CRAN by archiving as needed for each platform and removing unnecessary flies.
 #'
 #' @inheritParams update_cran
 #'
@@ -17,14 +17,15 @@ clean_cran_source <- function(cran_root) {
         return(invisible(NULL))
 
     source_packages <- fs::dir_ls(source_package_dir(cran_root), type = "file", glob = "*.tar.gz")
-    all_files_in_source_dir <- fs::dir_ls(source_package_dir(cran_root), type = "file", regexp = "^PACKAGES*", invert = TRUE)
+    all_files_in_source_dir <- fs::dir_ls(
+        source_package_dir(cran_root), type = "file", regexp = "^PACKAGES*", invert = TRUE
+    )
 
     non_targz_files <- setdiff(all_files_in_source_dir, source_packages)
     # TODO: Option to list files instead of deleting?
     if (length(non_targz_files) > 0)
         fs::file_delete(non_targz_files)
 
-    # TODO: Should baesname be here or in function?
     # TODO: Move archiving to new function
     package_names <- package_name_from_filename(source_packages)
     packages_by_name <- split(source_packages, package_names)
@@ -118,7 +119,6 @@ clean_cran_win_single_version <- function(cran_root, r_version) {
     if (length(non_zip_files) > 0)
         fs::file_delete(non_zip_files)
 
-    # TODO: Should basename be here or in function?
     # TODO: Move archiving to new function
     package_names <- package_name_from_filename(win_packages)
     packages_by_name <- split(win_packages, package_names)
