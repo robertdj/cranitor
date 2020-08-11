@@ -50,7 +50,6 @@ test_that("Update CRAN with new version of binary package", {
 
     cran_files <- list.files(win_package_dir(cran_root, getRversion()), recursive = TRUE)
 
-    # TODO: Save the basenames in setup
     expect_true(basename(f2) %in% cran_files)
     expect_true("PACKAGES" %in% cran_files)
     expect_true("PACKAGES.gz" %in% cran_files)
