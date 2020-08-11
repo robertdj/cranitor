@@ -1,11 +1,14 @@
 #' Clean a CRAN
 #'
-#' Clean a CRAN by archiving as needed for each platform and removing unnecessary flies.
+#' Clean a CRAN by archiving as needed for each platform and removing unnecessary files.
 #'
 #' @inheritParams update_cran
+#' @param list `[logical]` List unnecessary files or delete them.
 #'
 #' @export
 clean_cran <- function(cran_root, list = FALSE) {
+    assertthat::assert_that(assertthat::is.flag(list))
+
     clean_cran_source(cran_root, list = list)
     clean_cran_win(cran_root, list = list)
     # clean_cran_mac(cran_root)
@@ -13,6 +16,8 @@ clean_cran <- function(cran_root, list = FALSE) {
 
 
 clean_cran_source <- function(cran_root, list = FALSE) {
+    assertthat::assert_that(assertthat::is.flag(list))
+
     if (isFALSE(fs::dir_exists(source_package_dir(cran_root))))
         return(invisible(NULL))
 
@@ -107,6 +112,8 @@ sort_files_by_version <- function(package_files) {
 
 
 clean_cran_win <- function(cran_root, list = FALSE) {
+    assertthat::assert_that(assertthat::is.flag(list))
+
     win_versions <- list_win_package_dirs(cran_root)
     for (version in as.list(win_versions)) {
         clean_cran_win_single_version(cran_root, version, list = list)
@@ -115,6 +122,8 @@ clean_cran_win <- function(cran_root, list = FALSE) {
 
 
 clean_cran_win_single_version <- function(cran_root, r_version, list = FALSE) {
+    assertthat::assert_that(assertthat::is.flag(list))
+
     if (isFALSE(fs::dir_exists(win_package_dir(cran_root, r_version))))
         message("No Windows packages for R version", r_version, " in ", cran_root)
 

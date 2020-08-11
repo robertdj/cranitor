@@ -8,7 +8,9 @@ clean_cran(cran_root, list = FALSE)
 }
 \arguments{
 \item{cran_root}{The folder containing the CRAN.}
+
+\item{list}{\verb{[logical]} List unnecessary files or delete them.}
 }
 \description{
-Clean a CRAN by archiving as needed for each platform and removing unnecessary flies.
+Clean a CRAN by archiving as needed for each platform and removing unnecessary files.
 }
