@@ -25,8 +25,6 @@ make_demo_cran <- function(cran_root = NULL, packages = character(0), binary = F
     }
 
     if (length(packages) == 0) {
-        # TODO: Replace purrr with Map or mapply
-
         if (isTRUE(binary) && is_win_or_mac()) {
             binary <- c(TRUE, FALSE)
         } else {
@@ -66,9 +64,9 @@ make_demo_cran <- function(cran_root = NULL, packages = character(0), binary = F
 #' @export
 create_empty_package <- function(package_name, version, ...) {
     if (!rlang::is_installed("pkgbuild"))
-        stop("'create_empty_package' requires pkgbuild")
+        rlang::abort("'create_empty_package' requires pkgbuild")
 
-    package_path <- fs::path(tempdir(), package_name)
+    package_path <- fs::path_temp(package_name)
     fs::dir_create(package_path)
     withr::defer(fs::dir_delete(package_path))
 

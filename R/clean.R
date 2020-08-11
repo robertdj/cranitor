@@ -1,32 +1,47 @@
 #' Clean a CRAN
 #'
-#' Clean a CRAN by archiving as needed for each platform and removing unncessary flies.
+#' Clean a CRAN by archiving as needed for each platform and removing unnecessary files.
 #'
 #' @inheritParams update_cran
+#' @param list `[logical]` List unnecessary files or delete them.
 #'
 #' @export
-clean_cran <- function(cran_root) {
-    clean_cran_source(cran_root)
-    clean_cran_win(cran_root)
+clean_cran <- function(cran_root, list = FALSE) {
+    assertthat::assert_that(assertthat::is.flag(list))
+
+    clean_cran_source(cran_root, list = list)
+    clean_cran_win(cran_root, list = list)
     # clean_cran_mac(cran_root)
 }
 
 
-clean_cran_source <- function(cran_root) {
+clean_cran_source <- function(cran_root, list = FALSE) {
+    assertthat::assert_that(assertthat::is.flag(list))
+
     if (isFALSE(fs::dir_exists(source_package_dir(cran_root))))
         return(invisible(NULL))
 
-    source_packages <- fs::dir_ls(source_package_dir(cran_root), type = "file", glob = "*.tar.gz")
-    all_files_in_source_dir <- fs::dir_ls(source_package_dir(cran_root), type = "file", regexp = "^PACKAGES*", invert = TRUE)
+    source_packages <- fs::dir_ls(
+        source_package_dir(cran_root), recurse = TRUE, type = "file", glob = "*.tar.gz"
+    )
+    meta_files <- fs::path(
+        source_package_dir(cran_root),
+        c("PACKAGES", "PACKAGES.rds", "PACKAGES.gz", "Meta/archive.rds")
+    )
+    all_files_in_source_dir <- fs::dir_ls(
+        source_package_dir(cran_root), recurse = TRUE, type = "file"
+    )
 
-    non_targz_files <- setdiff(all_files_in_source_dir, source_packages)
-    # TODO: Option to list files instead of deleting?
-    if (length(non_targz_files) > 0)
-        fs::file_delete(non_targz_files)
+    unwanted_files <- setdiff(all_files_in_source_dir, c(source_packages, meta_files))
+    if (length(unwanted_files) > 0) {
+        if (isTRUE(list))
+            return(unwanted_files)
 
-    # TODO: Should baesname be here or in function?
+        fs::file_delete(unwanted_files)
+    }
+
     # TODO: Move archiving to new function
-    package_names <- package_name_from_filename(basename(source_packages))
+    package_names <- package_name_from_filename(source_packages)
     packages_by_name <- split(source_packages, package_names)
 
     for (package_files in packages_by_name) {
@@ -96,15 +111,19 @@ sort_files_by_version <- function(package_files) {
 }
 
 
-clean_cran_win <- function(cran_root) {
+clean_cran_win <- function(cran_root, list = FALSE) {
+    assertthat::assert_that(assertthat::is.flag(list))
+
     win_versions <- list_win_package_dirs(cran_root)
     for (version in as.list(win_versions)) {
-        clean_cran_win_single_version(cran_root, version)
+        clean_cran_win_single_version(cran_root, version, list = list)
     }
 }
 
 
-clean_cran_win_single_version <- function(cran_root, r_version) {
+clean_cran_win_single_version <- function(cran_root, r_version, list = FALSE) {
+    assertthat::assert_that(assertthat::is.flag(list))
+
     if (isFALSE(fs::dir_exists(win_package_dir(cran_root, r_version))))
         message("No Windows packages for R version", r_version, " in ", cran_root)
 
@@ -114,13 +133,15 @@ clean_cran_win_single_version <- function(cran_root, r_version) {
     )
 
     non_zip_files <- setdiff(all_files_in_win_dir, win_packages)
-    # TODO: Option to list files instead of deleting?
-    if (length(non_zip_files) > 0)
-        fs::file_delete(non_zip_files)
+    if (length(non_zip_files) > 0) {
+        if (isTRUE(list))
+            return(non_zip_files)
 
-    # TODO: Should basename be here or in function?
+        fs::file_delete(non_zip_files)
+    }
+
     # TODO: Move archiving to new function
-    package_names <- package_name_from_filename(basename(win_packages))
+    package_names <- package_name_from_filename(win_packages)
     packages_by_name <- split(win_packages, package_names)
 
     # TODO: Use by?

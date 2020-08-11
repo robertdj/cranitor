@@ -49,14 +49,13 @@ test_that("Update CRAN with new version of source package", {
     # cran_files <- fs::dir_ls(cran_root, type = "file", recurse = TRUE)
     cran_files <- list.files(source_package_dir(cran_root), recursive = TRUE)
 
-    # TODO: Save the basenames in setup
     expect_true(basename(f2) %in% cran_files)
     expect_true("PACKAGES" %in% cran_files)
     expect_true("PACKAGES.gz" %in% cran_files)
     expect_true("PACKAGES.rds" %in% cran_files)
     expect_true("Meta/archive.rds" %in% cran_files)
     expect_true(
-        fs::path("Archive", package_name_from_filename(basename(f1)), basename(f1)) %in% cran_files
+        fs::path("Archive", package_name_from_filename(f1), basename(f1)) %in% cran_files
     )
 })
 
@@ -68,6 +67,9 @@ test_that("Unexpected files are deleted from CRAN", {
     unwanted_file <- fs::path(source_package_dir(cran_root), "random_file")
     fs::file_create(unwanted_file)
     expect_true(fs::file_exists(unwanted_file))
+
+    unwanted_files <- clean_cran_source(cran_root, list = TRUE)
+    expect_equal(basename(unwanted_files), "random_file")
 
     clean_cran_source(cran_root)
     expect_false(fs::file_exists(unwanted_file))
