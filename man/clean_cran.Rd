@@ -4,7 +4,7 @@
 \alias{clean_cran}
 \title{Clean a CRAN}
 \usage{
-clean_cran(cran_root)
+clean_cran(cran_root, list = FALSE)
 }
 \arguments{
 \item{cran_root}{The folder containing the CRAN.}

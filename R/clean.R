@@ -6,8 +6,8 @@
 #'
 #' @export
 clean_cran <- function(cran_root, list = FALSE) {
-    clean_cran_source(cran_root, list = FALSE)
-    clean_cran_win(cran_root, list = FALSE)
+    clean_cran_source(cran_root, list = list)
+    clean_cran_win(cran_root, list = list)
     # clean_cran_mac(cran_root)
 }
 
@@ -109,7 +109,7 @@ sort_files_by_version <- function(package_files) {
 clean_cran_win <- function(cran_root, list = FALSE) {
     win_versions <- list_win_package_dirs(cran_root)
     for (version in as.list(win_versions)) {
-        clean_cran_win_single_version(cran_root, version, list = FALSE)
+        clean_cran_win_single_version(cran_root, version, list = list)
     }
 }
 

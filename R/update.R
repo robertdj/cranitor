@@ -59,6 +59,7 @@ get_file_in_archive <- function(archive, package_file) {
     withr::defer_parent(fs::dir_delete(tmp_dir))
 
     # Running "untar" in a tryCatch is noisy if system tar has warnings/errors
+    # TODO: Maybe try can damped the noise?
     files_in_archive <- extractor(archive, list = TRUE)
     if (package_ext(archive) == "zip")
         files_in_archive <- files_in_archive$Name
