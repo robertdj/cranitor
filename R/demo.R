@@ -10,13 +10,13 @@
 #' @return The folder `cran_root`
 #'
 #' @export
-make_demo_cran <- function(cran_root = NULL, packages = character(0), binary = FALSE) {
+make_demo_cran <- function(packages = character(0), cran_root = NULL, binary = FALSE) {
     if (is.null(cran_root))
         cran_root <- fs::path_temp("demo_cran", strftime(Sys.time(), format = "%Y-%m-%d_%H-%M-%S"))
 
     assertthat::assert_that(
-        assertthat::is.string(cran_root),
         is.character(packages),
+        assertthat::is.string(cran_root),
         assertthat::is.flag(binary)
     )
 
@@ -42,7 +42,7 @@ make_demo_cran <- function(cran_root = NULL, packages = character(0), binary = F
         packages <- purrr::pmap_chr(package_params, create_empty_package, quiet = TRUE)
     }
 
-    purrr::walk2(cran_root, packages, update_cran)
+    purrr::walk2(packages, cran_root, update_cran)
 
     clean_cran(cran_root)
 

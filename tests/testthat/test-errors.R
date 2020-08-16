@@ -4,7 +4,7 @@ test_that("Import non-package archive", {
     withr::defer(fs::file_delete(targz_file))
 
     expect_error(
-        update_cran(fs::path_temp("demo_cran"), targz_file),
+        update_cran(targz_file, fs::path_temp("demo_cran")),
         "baz/DESCRIPTION does not exist"
     )
 })
@@ -16,7 +16,7 @@ test_that("Import archive with corrupted DESCRIPTION", {
     withr::defer(fs::file_delete(targz_file))
 
     expect_error(
-        update_cran(fs::path_temp("demo_cran"), targz_file),
+        update_cran(targz_file, fs::path_temp("demo_cran")),
         "Malformed DESCRIPTION"
     )
 })

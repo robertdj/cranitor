@@ -4,14 +4,14 @@
 \alias{make_demo_cran}
 \title{Make a demo CRAN}
 \usage{
-make_demo_cran(cran_root = NULL, packages = character(0), binary = FALSE)
+make_demo_cran(packages = character(0), cran_root = NULL, binary = FALSE)
 }
 \arguments{
-\item{cran_root}{The folder containing the demo CRAN. If \code{NULL}, the folder \code{demo_cran} will be
-created in a temporary folder.}
-
 \item{packages}{A vector of file names for packages to be imported. If empty, a number of
 packages are made with \code{\link[=create_empty_package]{create_empty_package()}}.}
+
+\item{cran_root}{The folder containing the demo CRAN. If \code{NULL}, the folder \code{demo_cran} will be
+created in a temporary folder.}
 
 \item{binary}{Only relevant if \code{packages} is empty. Make binary packages in the demo CRAN? Only
 used on Windows and macOS.}

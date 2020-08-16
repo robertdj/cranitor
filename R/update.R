@@ -2,17 +2,17 @@
 #'
 #' Import package files into a local CRAN and update the metadata. Check the README in the repo.
 #'
-#' @param cran_root The folder containing the CRAN.
 #' @param package_file The location of the package file in either `tar.gz` format (source), `zip`
 #' (Windows) or `tgz` (Mac).
+#' @param cran_root The folder containing the CRAN.
 #'
 #' @export
-update_cran <- function(cran_root, package_file) {
+update_cran <- function(package_file, cran_root) {
     switch(
         package_ext(package_file),
-        "tar.gz" = update_cran_source(cran_root, package_file),
-        "zip"    = update_cran_win(cran_root, package_file)
-        # "tgz"    = update_cran_mac(cran_root, package_file)
+        "tar.gz" = update_cran_source(package_file, cran_root),
+        "zip"    = update_cran_win(package_file, cran_root)
+        # "tgz"    = update_cran_mac(package_file, cran_root)
     )
 }
 
@@ -59,7 +59,7 @@ get_file_in_archive <- function(archive, package_file) {
     withr::defer_parent(fs::dir_delete(tmp_dir))
 
     # Running "untar" in a tryCatch is noisy if system tar has warnings/errors
-    # TODO: Maybe try can damped the noise?
+    # TODO: Maybe try can dampen the noise?
     files_in_archive <- extractor(archive, list = TRUE)
     if (package_ext(archive) == "zip")
         files_in_archive <- files_in_archive$Name

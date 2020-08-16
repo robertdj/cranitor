@@ -45,7 +45,7 @@ clean_cran_source <- function(cran_root, list = FALSE) {
     packages_by_name <- split(source_packages, package_names)
 
     for (package_files in packages_by_name) {
-        archive_source_single_package(cran_root, package_files)
+        archive_source_single_package(package_files, cran_root)
     }
 
     update_meta(cran_root)
@@ -68,7 +68,7 @@ update_meta <- function(cran_root) {
 }
 
 
-archive_source_single_package <- function(cran_root, package_files) {
+archive_source_single_package <- function(package_files, cran_root) {
     package_name <- unique(package_name_from_filename(package_files))
     assertthat::assert_that(
         # assertthat::is.dir(package_files),
@@ -116,12 +116,12 @@ clean_cran_win <- function(cran_root, list = FALSE) {
 
     win_versions <- list_win_package_dirs(cran_root)
     for (version in as.list(win_versions)) {
-        clean_cran_win_single_version(cran_root, version, list = list)
+        clean_cran_win_single_version(version, cran_root, list = list)
     }
 }
 
 
-clean_cran_win_single_version <- function(cran_root, r_version, list = FALSE) {
+clean_cran_win_single_version <- function(r_version, cran_root, list = FALSE) {
     assertthat::assert_that(assertthat::is.flag(list))
 
     if (isFALSE(fs::dir_exists(win_package_dir(cran_root, r_version))))
@@ -146,14 +146,14 @@ clean_cran_win_single_version <- function(cran_root, r_version, list = FALSE) {
 
     # TODO: Use by?
     for (package_files in packages_by_name) {
-        archive_win_single_package(cran_root, package_files)
+        archive_win_single_package(package_files, cran_root)
     }
 
     tools::write_PACKAGES(win_package_dir(cran_root, r_version), type = "win.binary")
 }
 
 
-archive_win_single_package <- function(cran_root, package_files) {
+archive_win_single_package <- function(package_files, cran_root) {
     package_name <- unique(package_name_from_filename(package_files))
     assertthat::assert_that(
         assertthat::is.string(package_name)

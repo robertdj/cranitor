@@ -1,4 +1,4 @@
-update_cran_win <- function(cran_root, zip_file) {
+update_cran_win <- function(zip_file, cran_root) {
     assertthat::assert_that(
         assertthat::is.string(cran_root),
         assertthat::is.string(zip_file),
@@ -11,7 +11,7 @@ update_cran_win <- function(cran_root, zip_file) {
         stop(zip_file, " not built on Windows")
 
     r_version_used_in_build <- meta$Built$R
-    import_win_package(cran_root, zip_file, r_version_used_in_build)
+    import_win_package(zip_file, r_version_used_in_build, cran_root)
 
     clean_cran_win(cran_root)
 
@@ -19,15 +19,16 @@ update_cran_win <- function(cran_root, zip_file) {
 }
 
 
-import_win_package <- function(cran_root, package, r_version) {
+import_win_package <- function(package, r_version, cran_root) {
     assertthat::assert_that(
         assertthat::has_extension(package, "zip")
     )
 
-    if (isFALSE(fs::dir_exists(win_package_dir(cran_root, r_version))))
+    # TODO: Don't check
+    if (isFALSE(fs::dir_exists(win_package_dir(r_version, cran_root))))
         fs::dir_create(win_package_dir(cran_root, r_version))
 
     # TODO: copy or move?
-    fs::file_copy(package, win_package_dir(cran_root, r_version))
+    fs::file_copy(package, win_package_dir(r_version, cran_root))
 }
 

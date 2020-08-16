@@ -4,13 +4,13 @@
 \alias{update_cran}
 \title{Update local CRAN with the package}
 \usage{
-update_cran(cran_root, package_file)
+update_cran(package_file, cran_root)
 }
 \arguments{
-\item{cran_root}{The folder containing the CRAN.}
-
 \item{package_file}{The location of the package file in either \code{tar.gz} format (source), \code{zip}
 (Windows) or \code{tgz} (Mac).}
+
+\item{cran_root}{The folder containing the CRAN.}
 }
 \description{
 Import package files into a local CRAN and update the metadata. Check the README in the repo.
