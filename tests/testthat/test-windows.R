@@ -27,7 +27,7 @@ test_that("Update CRAN with binary package", {
 
     update_cran_win(cran_root, bin_package_paths["foo_0.0.1"])
 
-    cran_files <- list.files(win_package_dir(cran_root, getRversion()), recursive = TRUE)
+    cran_files <- list.files(win_package_dir(getRversion(), cran_root), recursive = TRUE)
 
     # The order of cran_files depend on the OS
     expect_length(cran_files, 4L)
@@ -48,7 +48,7 @@ test_that("Update CRAN with new version of binary package", {
     f2 <- bin_package_paths["foo_0.0.2"]
     update_cran_win(cran_root, f2)
 
-    cran_files <- list.files(win_package_dir(cran_root, getRversion()), recursive = TRUE)
+    cran_files <- list.files(win_package_dir(getRversion(), cran_root), recursive = TRUE)
 
     expect_true(basename(f2) %in% cran_files)
     expect_true("PACKAGES" %in% cran_files)
@@ -61,7 +61,7 @@ test_that("Unexpected files are deleted from CRAN", {
     cran_root <- make_demo_cran(packages = bin_package_paths)
     withr::defer(fs::dir_delete(cran_root))
 
-    unwanted_file <- fs::path(win_package_dir(cran_root), "random_file")
+    unwanted_file <- fs::path(win_package_dir(cran_root = cran_root), "random_file")
     fs::file_create(unwanted_file)
     expect_true(fs::file_exists(unwanted_file))
 

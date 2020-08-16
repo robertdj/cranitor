@@ -8,17 +8,12 @@ win_base_package_dir <- function(cran_root) {
 }
 
 
-win_package_dir <- function(cran_root, r_version = getRversion()) {
-    wpd(r_version, cran_root)
+win_package_dir <- function(r_version = getRversion(), cran_root) {
+    UseMethod("win_package_dir", r_version)
 }
 
 
-wpd <- function(r_version, cran_root) {
-    UseMethod("wpd", r_version)
-}
-
-
-wpd.character <- function(r_version, cran_root) {
+win_package_dir.character <- function(r_version, cran_root) {
     assertthat::assert_that(
         assertthat::is.string(r_version)
     )
@@ -39,7 +34,7 @@ wpd.character <- function(r_version, cran_root) {
 }
 
 
-wpd.R_system_version <- function(r_version, cran_root) {
+win_package_dir.R_system_version <- function(r_version, cran_root) {
     fs::path(
         win_base_package_dir(cran_root), paste0(r_version$major, ".", r_version$minor)
     )

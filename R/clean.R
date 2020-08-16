@@ -120,12 +120,12 @@ clean_cran_win <- function(cran_root, list = FALSE) {
 clean_cran_win_single_version <- function(r_version, cran_root, list = FALSE) {
     assertthat::assert_that(assertthat::is.flag(list))
 
-    if (isFALSE(fs::dir_exists(win_package_dir(cran_root, r_version))))
+    if (isFALSE(fs::dir_exists(win_package_dir(r_version, cran_root))))
         message("No Windows packages for R version", r_version, " in ", cran_root)
 
-    win_packages <- fs::dir_ls(win_package_dir(cran_root, r_version), type = "file", glob = "*.zip")
+    win_packages <- fs::dir_ls(win_package_dir(r_version, cran_root), type = "file", glob = "*.zip")
     all_files_in_win_dir <- fs::dir_ls(
-        win_package_dir(cran_root, r_version), type = "file", regexp = "^PACKAGES*", invert = TRUE
+        win_package_dir(r_version, cran_root), type = "file", regexp = "^PACKAGES*", invert = TRUE
     )
 
     non_zip_files <- setdiff(all_files_in_win_dir, win_packages)
@@ -142,7 +142,7 @@ clean_cran_win_single_version <- function(r_version, cran_root, list = FALSE) {
 
     purrr::walk(packages_by_name, archive_single_win_package, cran_root = cran_root)
 
-    tools::write_PACKAGES(win_package_dir(cran_root, r_version), type = "win.binary")
+    tools::write_PACKAGES(win_package_dir(r_version, cran_root), type = "win.binary")
 }
 
 

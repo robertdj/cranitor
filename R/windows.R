@@ -15,7 +15,7 @@ update_cran_win <- function(zip_file, cran_root) {
 
     clean_cran_win(cran_root)
 
-    tools::write_PACKAGES(win_package_dir(cran_root, r_version_used_in_build), type = "win.binary")
+    tools::write_PACKAGES(win_package_dir(r_version_used_in_build, cran_root), type = "win.binary")
 }
 
 
@@ -25,8 +25,8 @@ import_win_package <- function(package, r_version, cran_root) {
     )
 
     # TODO: Don't check
-    if (isFALSE(fs::dir_exists(win_package_dir(r_version, cran_root))))
-        fs::dir_create(win_package_dir(cran_root, r_version))
+    if (isFALSE(fs::dir_exists(win_package_dir(cran_root, cran_root))))
+        fs::dir_create(win_package_dir(r_version, cran_root))
 
     # TODO: copy or move?
     fs::file_copy(package, win_package_dir(r_version, cran_root))
