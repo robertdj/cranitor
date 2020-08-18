@@ -25,7 +25,7 @@ import_win_package <- function(package, r_version, cran_root) {
     )
 
     # TODO: Don't check
-    if (isFALSE(fs::dir_exists(win_package_dir(cran_root, cran_root))))
+    if (isFALSE(fs::dir_exists(win_package_dir(r_version, cran_root))))
         fs::dir_create(win_package_dir(r_version, cran_root))
 
     # TODO: copy or move?

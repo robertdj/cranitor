@@ -4,7 +4,7 @@ skip_on_os(c("linux", "mac", "solaris"))
 test_that("Import binary package", {
     clean_test_cran(cran_root)
 
-    import_win_package(cran_root, bin_package_paths["foo_0.0.1"], getRversion())
+    import_win_package(bin_package_paths["foo_0.0.1"], getRversion(), cran_root)
 
     cran_files <- fs::dir_ls(cran_root, type = "file", recurse = TRUE)
     expect_equal(basename(cran_files), basename(bin_package_paths["foo_0.0.1"]))
@@ -14,9 +14,9 @@ test_that("Import binary package", {
 test_that("Import the same binary package twice", {
     clean_test_cran(cran_root)
 
-    import_win_package(cran_root, bin_package_paths["foo_0.0.1"], getRversion())
+    import_win_package(bin_package_paths["foo_0.0.1"], getRversion(), cran_root)
     expect_error(
-        import_win_package(cran_root, bin_package_paths["foo_0.0.1"], getRversion()),
+        import_win_package(bin_package_paths["foo_0.0.1"], getRversion(), cran_root),
         class = "EEXIST"
     )
 })
@@ -25,7 +25,7 @@ test_that("Import the same binary package twice", {
 test_that("Update CRAN with binary package", {
     clean_test_cran(cran_root)
 
-    update_cran_win(cran_root, bin_package_paths["foo_0.0.1"])
+    update_cran_win(bin_package_paths["foo_0.0.1"], cran_root)
 
     cran_files <- list.files(win_package_dir(getRversion(), cran_root), recursive = TRUE)
 
@@ -43,10 +43,10 @@ test_that("Update CRAN with new version of binary package", {
     clean_test_cran(cran_root)
 
     f1 <- bin_package_paths["foo_0.0.1"]
-    update_cran_win(cran_root, f1)
+    update_cran_win(f1, cran_root)
 
     f2 <- bin_package_paths["foo_0.0.2"]
-    update_cran_win(cran_root, f2)
+    update_cran_win(f2, cran_root)
 
     cran_files <- list.files(win_package_dir(getRversion(), cran_root), recursive = TRUE)
 
@@ -61,7 +61,7 @@ test_that("Unexpected files are deleted from CRAN", {
     cran_root <- make_demo_cran(packages = bin_package_paths)
     withr::defer(fs::dir_delete(cran_root))
 
-    unwanted_file <- fs::path(win_package_dir(cran_root = cran_root), "random_file")
+    unwanted_file <- fs::path(win_package_dir(getRversion(), cran_root), "random_file")
     fs::file_create(unwanted_file)
     expect_true(fs::file_exists(unwanted_file))
 
