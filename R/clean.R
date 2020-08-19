@@ -44,9 +44,7 @@ clean_cran_source <- function(cran_root, list = FALSE) {
     package_names <- package_name_from_filename(source_packages)
     packages_by_name <- split(source_packages, package_names)
 
-    for (package_files in packages_by_name) {
-        archive_source_single_package(cran_root, package_files)
-    }
+    purrr::walk(packages_by_name, archive_single_source_package, cran_root = cran_root)
 
     update_meta(cran_root)
 
@@ -68,7 +66,7 @@ update_meta <- function(cran_root) {
 }
 
 
-archive_source_single_package <- function(cran_root, package_files) {
+archive_single_source_package <- function(package_files, cran_root) {
     package_name <- unique(package_name_from_filename(package_files))
     assertthat::assert_that(
         # assertthat::is.dir(package_files),
@@ -115,21 +113,19 @@ clean_cran_win <- function(cran_root, list = FALSE) {
     assertthat::assert_that(assertthat::is.flag(list))
 
     win_versions <- list_win_package_dirs(cran_root)
-    for (version in as.list(win_versions)) {
-        clean_cran_win_single_version(cran_root, version, list = list)
-    }
+    purrr::walk(win_versions, clean_cran_win_single_version, cran_root = cran_root, list = list)
 }
 
 
-clean_cran_win_single_version <- function(cran_root, r_version, list = FALSE) {
+clean_cran_win_single_version <- function(r_version, cran_root, list = FALSE) {
     assertthat::assert_that(assertthat::is.flag(list))
 
-    if (isFALSE(fs::dir_exists(win_package_dir(cran_root, r_version))))
+    if (isFALSE(fs::dir_exists(win_package_dir(r_version, cran_root))))
         message("No Windows packages for R version", r_version, " in ", cran_root)
 
-    win_packages <- fs::dir_ls(win_package_dir(cran_root, r_version), type = "file", glob = "*.zip")
+    win_packages <- fs::dir_ls(win_package_dir(r_version, cran_root), type = "file", glob = "*.zip")
     all_files_in_win_dir <- fs::dir_ls(
-        win_package_dir(cran_root, r_version), type = "file", regexp = "^PACKAGES*", invert = TRUE
+        win_package_dir(r_version, cran_root), type = "file", regexp = "^PACKAGES*", invert = TRUE
     )
 
     non_zip_files <- setdiff(all_files_in_win_dir, win_packages)
@@ -144,16 +140,13 @@ clean_cran_win_single_version <- function(cran_root, r_version, list = FALSE) {
     package_names <- package_name_from_filename(win_packages)
     packages_by_name <- split(win_packages, package_names)
 
-    # TODO: Use by?
-    for (package_files in packages_by_name) {
-        archive_win_single_package(cran_root, package_files)
-    }
+    purrr::walk(packages_by_name, archive_single_win_package, cran_root = cran_root)
 
-    tools::write_PACKAGES(win_package_dir(cran_root, r_version), type = "win.binary")
+    tools::write_PACKAGES(win_package_dir(r_version, cran_root), type = "win.binary")
 }
 
 
-archive_win_single_package <- function(cran_root, package_files) {
+archive_single_win_package <- function(package_files, cran_root) {
     package_name <- unique(package_name_from_filename(package_files))
     assertthat::assert_that(
         assertthat::is.string(package_name)

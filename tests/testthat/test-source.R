@@ -1,7 +1,7 @@
 test_that("Import source package", {
     clean_test_cran(cran_root)
 
-    import_source_package(cran_root, src_package_paths[1])
+    import_source_package(src_package_paths[1], cran_root)
 
     cran_files <- fs::dir_ls(cran_root, type = "file", recurse = TRUE)
     expect_equal(basename(cran_files), basename(src_package_paths[1]))
@@ -11,9 +11,9 @@ test_that("Import source package", {
 test_that("Import the same source package twice", {
     clean_test_cran(cran_root)
 
-    import_source_package(cran_root, src_package_paths[1])
+    import_source_package(src_package_paths[1], cran_root)
     expect_error(
-        import_source_package(cran_root, src_package_paths[1]),
+        import_source_package(src_package_paths[1], cran_root),
         class = "EEXIST"
     )
 })
@@ -22,7 +22,7 @@ test_that("Import the same source package twice", {
 test_that("Update CRAN with source package", {
     clean_test_cran(cran_root)
 
-    update_cran_source(cran_root, src_package_paths[1])
+    update_cran_source(src_package_paths[1], cran_root)
 
     # cran_files <- fs::dir_ls(cran_root, type = "file", recurse = TRUE)
     cran_files <- list.files(source_package_dir(cran_root), recursive = TRUE)
@@ -41,10 +41,10 @@ test_that("Update CRAN with new version of source package", {
     clean_test_cran(cran_root)
 
     f1 <- src_package_paths["foo_0.0.1"]
-    update_cran_source(cran_root, f1)
+    update_cran_source(f1, cran_root)
 
     f2 <- src_package_paths["foo_0.0.2"]
-    update_cran_source(cran_root, f2)
+    update_cran_source(f2, cran_root)
 
     # cran_files <- fs::dir_ls(cran_root, type = "file", recurse = TRUE)
     cran_files <- list.files(source_package_dir(cran_root), recursive = TRUE)

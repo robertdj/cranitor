@@ -54,6 +54,34 @@ The empty packages are created with `create_empty_package`.
 Alternatively, a vector of filenames with paths to package files can be supplied to `make_demo_cran`.
 Package files can be made from a project with `devtools::build` or downloaded from another CRAN.
 
+With R 4.0.x on Windows the content of `cran_root` looks like this:
+
+```
+> cran_root <- cranitor::make_demo_cran(fs::path_temp("cran"), binary = TRUE)
+> fs::dir_tree(cran_root)
++-- bin
+|   \-- windows
+|       \-- contrib
+|           \-- 4.0
+|               +-- bar_0.0.1.zip
+|               +-- foo_0.0.2.zip
+|               +-- PACKAGES
+|               +-- PACKAGES.gz
+|               \-- PACKAGES.rds
+\-- src
+    \-- contrib
+        +-- Archive
+        |   \-- foo
+        |       \-- foo_0.0.1.tar.gz
+        +-- bar_0.0.1.tar.gz
+        +-- foo_0.0.2.tar.gz
+        +-- Meta
+        |   \-- archive.rds
+        +-- PACKAGES
+        +-- PACKAGES.gz
+        \-- PACKAGES.rds
+```
+
 If a CRAN is a mess (I have typically seen unwanted files scattered in different folders), the function `clean_cran` can help out.
 
 
