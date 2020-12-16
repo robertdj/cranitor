@@ -1,9 +1,9 @@
 #' Make a demo CRAN
 #'
-#' @param cran_root The folder containing the demo CRAN. If `NULL`, the folder `demo_cran` will be
-#' created in a temporary folder.
 #' @param packages A vector of file names for packages to be imported. If empty, a number of
 #' packages are made with [create_empty_package()].
+#' @param cran_root The folder containing the demo CRAN. If `NULL`, the folder `demo_cran` will be
+#' created in a temporary folder.
 #' @param binary Only relevant if `packages` is empty. Make binary packages in the demo CRAN? Only
 #' used on Windows and macOS.
 #'
