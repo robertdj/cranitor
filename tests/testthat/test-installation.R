@@ -82,7 +82,3 @@ test_that("Install binary package from hosted CRAN", {
 
 
 p$kill()
-# print(p)
-
-# unlink(cran_root, recursive = TRUE)
-
