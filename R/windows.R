@@ -5,7 +5,7 @@ update_cran_win <- function(zip_file, cran_root) {
         package_ext(zip_file) == "zip"
     )
 
-    meta <- get_package_meta(zip_file)
+    meta <- pkg.peek::get_package_meta(zip_file)
 
     if (tolower(meta$Built$OStype) != "windows")
         stop(zip_file, " not built on Windows")

@@ -17,6 +17,7 @@ Imports:
     fs,
     purrr,
     rlang,
+    pkg.peek,
     utils,
     withr
 Suggests:
@@ -25,3 +26,5 @@ Suggests:
     remotes,
     servr,
     testthat (>= 2.1.0)
+Remotes: 
+    robertdj/pkg.peek
