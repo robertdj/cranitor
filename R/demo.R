@@ -42,7 +42,7 @@ make_demo_cran <- function(packages = character(0), cran_root = NULL, binary = F
         packages <- purrr::pmap_chr(package_params, create_empty_package, quiet = TRUE)
     }
 
-    purrr::walk2(packages, cran_root, update_cran)
+    purrr::walk(packages, update_cran, cran_root = cran_root)
 
     clean_cran(cran_root)
 
