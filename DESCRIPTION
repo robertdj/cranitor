@@ -1,6 +1,6 @@
 Package: cranitor
 Title: Janitor for a CRAN
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: person("Robert", "Dahl Jacobsen", role = c("aut", "cre"), email = "git@dahl-jacobsen.dk")
 Description: Taking care of a CRAN from initialization to updating metadata when new 
     packages/package versions are included.
@@ -9,7 +9,7 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/robertdj/cranitor
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Depends:
     R (>= 3.5)
 Imports:
@@ -17,11 +17,14 @@ Imports:
     fs,
     purrr,
     rlang,
-    utils,
+    pkg.peek,
     withr
 Suggests:
     pkgbuild,
     processx,
     remotes,
     servr,
-    testthat (>= 2.1.0)
+    testthat (>= 2.1.0),
+    utils
+Remotes: 
+    robertdj/pkg.peek

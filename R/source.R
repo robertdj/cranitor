@@ -5,7 +5,7 @@ update_cran_source <- function(targz_file, cran_root) {
         package_ext(targz_file) == "tar.gz"
     )
 
-    desc <- get_package_desc(targz_file)
+    desc <- pkg.peek::get_package_desc(targz_file)
     is_source_package <- is.na(desc["Built"])
 
     if (isFALSE(is_source_package)) {

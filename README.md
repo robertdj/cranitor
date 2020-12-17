@@ -37,7 +37,7 @@ I have no experience trying to publish a package to CRAN, but let me know if I s
 To create/update a local CRAN with a new package file the `update_cran` function is available:
 
 ```
-cranitor::update_cran(cran_root, package_file)
+cranitor::update_cran(package_file, cran_root)
 ```
 
 The `package_file` can be `tar.gz` file (with the source of a package) or a `zip` file (a binary version of package suitable for Windows).
@@ -46,7 +46,7 @@ The `package_file` can be `tar.gz` file (with the source of a package) or a `zip
 A demo CRAN can be made that create and import a few "empty packages":
 
 ```
-cran_root <- cranitor::make_demo_cran("path/to/cran")
+cran_root <- cranitor::make_demo_cran()
 ```
 
 The empty packages are created with `create_empty_package`.
@@ -57,7 +57,7 @@ Package files can be made from a project with `devtools::build` or downloaded fr
 With R 4.0.x on Windows the content of `cran_root` looks like this:
 
 ```
-> cran_root <- cranitor::make_demo_cran(fs::path_temp("cran"), binary = TRUE)
+> cran_root <- cranitor::make_demo_cran(cran_root = fs::path_temp("cran"), binary = TRUE)
 > fs::dir_tree(cran_root)
 +-- bin
 |   \-- windows
@@ -82,7 +82,7 @@ With R 4.0.x on Windows the content of `cran_root` looks like this:
         \-- PACKAGES.rds
 ```
 
-If a CRAN is a mess (I have typically seen unwanted files scattered in different folders), the function `clean_cran` can help out.
+If a CRAN is a mess (I have typically seen unwanted files scattered in different folders), the function `clean_cran` can help out by deleting unexpected files.
 
 
 # macOS

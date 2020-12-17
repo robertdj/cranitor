@@ -1,9 +1,9 @@
 #' Make a demo CRAN
 #'
-#' @param cran_root The folder containing the demo CRAN. If `NULL`, the folder `demo_cran` will be
-#' created in a temporary folder.
 #' @param packages A vector of file names for packages to be imported. If empty, a number of
 #' packages are made with [create_empty_package()].
+#' @param cran_root The folder containing the demo CRAN. If `NULL`, the folder `demo_cran` will be
+#' created in a temporary folder.
 #' @param binary Only relevant if `packages` is empty. Make binary packages in the demo CRAN? Only
 #' used on Windows and macOS.
 #'
@@ -12,7 +12,7 @@
 #' @export
 make_demo_cran <- function(packages = character(0), cran_root = NULL, binary = FALSE) {
     if (is.null(cran_root))
-        cran_root <- fs::path_temp("demo_cran", strftime(Sys.time(), format = "%Y-%m-%d_%H-%M-%S"))
+        cran_root <- make_random_demo_cran_path()
 
     assertthat::assert_that(
         is.character(packages),
@@ -42,11 +42,16 @@ make_demo_cran <- function(packages = character(0), cran_root = NULL, binary = F
         packages <- purrr::pmap_chr(package_params, create_empty_package, quiet = TRUE)
     }
 
-    purrr::walk2(packages, cran_root, update_cran)
+    purrr::walk(packages, update_cran, cran_root = cran_root)
 
     clean_cran(cran_root)
 
     return(cran_root)
+}
+
+
+make_random_demo_cran_path <- function() {
+    fs::path_temp("demo_cran", strftime(Sys.time(), format = "%Y-%m-%d_%H-%M-%S"))
 }
 
 

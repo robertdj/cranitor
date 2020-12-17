@@ -1,6 +1,3 @@
-cran_root <- fs::path_temp("cranitor_test", "demo_cran")
-
-
 # Source --------------------------------------------------------------------------------------
 
 package_tbl <- data.frame(
