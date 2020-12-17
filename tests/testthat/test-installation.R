@@ -1,6 +1,6 @@
 # Setup ---------------------------------------------------------------------------------------
 
-make_demo_cran(cran_root, packages = package_paths)
+make_demo_cran(packages = package_paths, cran_root = cran_root)
 withr::defer(fs::dir_delete(cran_root))
 
 cran_port <- servr::random_port()
@@ -34,6 +34,7 @@ test_that("List available packages in CRAN", {
 
 test_that("Install source package from hosted CRAN", {
     test_library <- make_test_library()
+    withr::defer(fs::dir_delete(test_library))
 
     test_library_packages <- installed.packages(lib.loc = test_library)
     expect_equal(nrow(test_library_packages), 0)
@@ -51,6 +52,7 @@ test_that("Install source package from hosted CRAN", {
 
 test_that("Install archived versions of package from hosted CRAN", {
     test_library <- make_test_library()
+    withr::defer(fs::dir_delete(test_library))
 
     remotes::install_version(
         "foo", version = "0.0.1", lib = test_library, repos = cran_url, quiet = TRUE
@@ -66,6 +68,7 @@ test_that("Install binary package from hosted CRAN", {
     skip_on_os(c("linux", "mac", "solaris"))
 
     test_library <- make_test_library()
+    withr::defer(fs::dir_delete(test_library))
 
     test_library_packages <- installed.packages(lib.loc = test_library)
     expect_equal(nrow(test_library_packages), 0)
