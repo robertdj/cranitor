@@ -18,13 +18,13 @@ Imports:
     purrr,
     rlang,
     pkg.peek,
-    utils,
     withr
 Suggests:
     pkgbuild,
     processx,
     remotes,
     servr,
-    testthat (>= 2.1.0)
+    testthat (>= 2.1.0),
+    utils
 Remotes: 
     robertdj/pkg.peek
