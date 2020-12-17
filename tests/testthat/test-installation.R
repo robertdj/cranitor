@@ -1,7 +1,6 @@
 # Setup ---------------------------------------------------------------------------------------
 
-make_demo_cran(packages = package_paths, cran_root = cran_root)
-withr::defer(fs::dir_delete(cran_root))
+cran_root <- make_demo_cran(packages = package_paths)
 
 cran_port <- servr::random_port()
 cran_url <- paste0("http://localhost:", cran_port)
@@ -11,7 +10,6 @@ p <- processx::process$new(
     c("-e", paste0("servr::httd(dir = '", cran_root, "', port = ", cran_port, ")")),
     cleanup_tree = TRUE
 )
-# print(p)
 
 # servr needs a little time to start
 Sys.sleep(1)

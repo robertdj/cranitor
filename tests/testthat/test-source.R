@@ -1,5 +1,6 @@
 test_that("Import source package", {
-    clean_test_cran(cran_root)
+    cran_root <- make_random_demo_cran_path()
+    withr::defer(fs::dir_delete(cran_root))
 
     import_source_package(src_package_paths[1], cran_root)
 
@@ -9,7 +10,8 @@ test_that("Import source package", {
 
 
 test_that("Import the same source package twice", {
-    clean_test_cran(cran_root)
+    cran_root <- make_random_demo_cran_path()
+    withr::defer(fs::dir_delete(cran_root))
 
     import_source_package(src_package_paths[1], cran_root)
     expect_error(
@@ -20,7 +22,8 @@ test_that("Import the same source package twice", {
 
 
 test_that("Update CRAN with source package", {
-    clean_test_cran(cran_root)
+    cran_root <- make_random_demo_cran_path()
+    withr::defer(fs::dir_delete(cran_root))
 
     update_cran_source(src_package_paths[1], cran_root)
 
@@ -38,7 +41,8 @@ test_that("Update CRAN with source package", {
 
 
 test_that("Update CRAN with new version of source package", {
-    clean_test_cran(cran_root)
+    cran_root <- make_random_demo_cran_path()
+    withr::defer(fs::dir_delete(cran_root))
 
     f1 <- src_package_paths["foo_0.0.1"]
     update_cran_source(f1, cran_root)

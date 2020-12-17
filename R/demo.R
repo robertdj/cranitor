@@ -12,7 +12,7 @@
 #' @export
 make_demo_cran <- function(packages = character(0), cran_root = NULL, binary = FALSE) {
     if (is.null(cran_root))
-        cran_root <- fs::path_temp("demo_cran", strftime(Sys.time(), format = "%Y-%m-%d_%H-%M-%S"))
+        cran_root <- make_random_demo_cran_path()
 
     assertthat::assert_that(
         is.character(packages),
@@ -47,6 +47,11 @@ make_demo_cran <- function(packages = character(0), cran_root = NULL, binary = F
     clean_cran(cran_root)
 
     return(cran_root)
+}
+
+
+make_random_demo_cran_path <- function() {
+    fs::path_temp("demo_cran", strftime(Sys.time(), format = "%Y-%m-%d_%H-%M-%S"))
 }
 
 
