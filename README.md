@@ -88,5 +88,5 @@ If a CRAN is a mess (I have typically seen unwanted files scattered in different
 # macOS
 
 Unfortunately, I don't have access to a contemporary Mac, making it very difficult to debug on this platform.
-Therefore, there is only *very* rudimentary support for `tgz` files (a binary version suitable for macOS).
+As a consequence, there is no support for `tgz` files (a binary version suitable for macOS).
 
