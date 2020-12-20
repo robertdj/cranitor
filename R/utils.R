@@ -9,6 +9,17 @@ is_win_or_mac <- function() {
 }
 
 
+is_linux <- function() {
+    sysname <- tolower(Sys.info()[["sysname"]])
+
+    if ("linux" %in% sysname) {
+        return(TRUE)
+    } else {
+        return(FALSE)
+    }
+}
+
+
 package_ext <- function(package_file) {
     if (endsWith(package_file, ".tar.gz")) {
         file_ext <- "tar.gz"
@@ -22,5 +33,7 @@ package_ext <- function(package_file) {
 
 package_name_from_filename <- function(package_file) {
     package_file_sans_path <- basename(package_file)
-    substr(package_file_sans_path, 1, regexpr("_", package_file_sans_path) - 1)
+    package_name_end <- regexpr("_", package_file_sans_path) - 1
+
+    substr(package_file_sans_path, 1, package_name_end)
 }
