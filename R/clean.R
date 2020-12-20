@@ -96,7 +96,7 @@ sort_files_by_version <- function(package_files) {
 
     package_file_pattern <- paste0(
         "^", package_name,
-        "_(([[:digit:]]{1,}[[:punct:]]){3,4}).*(tar\\.gz|tgz|zip)$"
+        "_(([[:digit:]]{1,}(\\.|_)){3,4}).*(tar\\.gz|tgz|zip)$"
     )
 
     version_numbers_plus_dot <- sub(package_file_pattern, "\\1", filenames_sans_path)
