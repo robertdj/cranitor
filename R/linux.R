@@ -7,14 +7,13 @@ update_cran_linux <- function(targz_file, cran_root, distro) {
         pkg.peek::is_package_built(targz_file)
     )
 
-    meta <- pkg.peek::get_package_meta(zip_file)
+    meta <- pkg.peek::get_package_meta(targz_file)
     if (tolower(meta$Built$OStype) != "unix")
-        stop(zip_file, " not built on Linux")
+        stop(targz_file, " not built on Linux")
 
     r_version <- pkg.peek::get_r_version(targz_file)
     linux_dir <- linux_package_dir(r_version, distro, cran_root)
-    if (linux_dir != fs::path_sanitize(linux_dir))
-        rlang::abort(paste0("'", linux_dir, "' is not a valid path"))
+    # TODO: Check if linux_dir is a valid path
 
     import_linux_package(targz_file, linux_dir)
 
