@@ -48,6 +48,7 @@ make_demo_cran <- function(packages = character(0), cran_root = NULL, binary = F
         )
 
         packages <- purrr::pmap_chr(package_params, create_empty_package, quiet = TRUE)
+        withr::defer(fs::file_delete(packages))
     }
 
     purrr::walk(packages, update_cran, cran_root = cran_root, distro = distro)
@@ -100,6 +101,12 @@ create_empty_package <- function(package_name, version, ...) {
         con = fs::path(package_name, "DESCRIPTION")
         )
 
-        pkgbuild::build(path = package_name, ...)
+        # Using "dest_path = tempdir()" in pkgbuild::build gives the error:
+        # formal argument "dest_path" matched by multiple actual arguments
+        temp_package_location <- pkgbuild::build(path = package_name, ...)
+        package_location <- fs::path_temp(basename(temp_package_location))
+        fs::file_move(temp_package_location, package_location)
     })
+
+    return(package_location)
 }
