@@ -4,7 +4,12 @@
 \alias{make_demo_cran}
 \title{Make a demo CRAN}
 \usage{
-make_demo_cran(packages = character(0), cran_root = NULL, binary = FALSE)
+make_demo_cran(
+  packages = character(0),
+  cran_root = NULL,
+  binary = FALSE,
+  distro = NA_character_
+)
 }
 \arguments{
 \item{packages}{A vector of file names for packages to be imported. If empty, a number of
@@ -15,6 +20,10 @@ created in a temporary folder.}
 
 \item{binary}{Only relevant if \code{packages} is empty. Make binary packages in the demo CRAN? Only
 used on Windows and macOS.}
+
+\item{distro}{Only relevant on Linux and when \code{binary} is \code{TRUE}. An indicative name of the Linux
+distribution being used. The only restriction is that it should fit in a URL. As an example,
+\code{ubuntu/focal} is a permitted name.}
 }
 \value{
 The folder \code{cran_root}

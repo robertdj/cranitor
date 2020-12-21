@@ -21,6 +21,7 @@ make_demo_cran <- function(packages = character(0), cran_root = NULL, binary = F
     assertthat::assert_that(
         is.character(packages),
         assertthat::is.string(cran_root),
+        assertthat::is.string(distro),
         assertthat::is.flag(binary)
     )
 
