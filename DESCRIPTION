@@ -27,4 +27,4 @@ Suggests:
     testthat (>= 2.1.0),
     utils
 Remotes: 
-    robertdj/pkg.peek
+    robertdj/pkg.peek@v0.1.0
