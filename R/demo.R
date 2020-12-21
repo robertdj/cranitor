@@ -79,27 +79,27 @@ create_empty_package <- function(package_name, version, ...) {
     if (!rlang::is_installed("pkgbuild"))
         rlang::abort("'create_empty_package' requires pkgbuild")
 
-    package_path <- fs::path_temp(package_name)
-    fs::dir_create(package_path)
-    withr::defer(fs::dir_delete(package_path))
+    withr::with_tempdir({
+        fs::dir_create(package_name)
 
-    writeLines(
-        "exportPattern(\"^[^\\\\.]\")",
-        con = fs::path(package_path, "NAMESPACE")
-    )
+        writeLines(
+            "exportPattern(\"^[^\\\\.]\")",
+            con = fs::path(package_name, "NAMESPACE")
+        )
 
-    writeLines(c(
-        paste("Package:", package_name),
-        "Title: Test package for cranitor",
-        paste("Version:", version),
-        "Authors@R: person('First', 'Last', role = c('aut', 'cre'), email = 'first.last@example.com')",
-        "Description: Test package for cranitor.",
-        "License: MIT",
-        "Encoding: UTF-8",
-        "LazyData: true"
+        writeLines(c(
+            paste("Package:", package_name),
+            "Title: Test package for cranitor",
+            paste("Version:", version),
+            "Authors@R: person('First', 'Last', role = c('aut', 'cre'), email = 'first.last@example.com')",
+            "Description: Test package for cranitor.",
+            "License: MIT",
+            "Encoding: UTF-8",
+            "LazyData: true"
         ),
-        con = fs::path(package_path, "DESCRIPTION")
-    )
+        con = fs::path(package_name, "DESCRIPTION")
+        )
 
-    pkgbuild::build(path = package_path, ...)
+        pkgbuild::build(path = package_name, ...)
+    })
 }
