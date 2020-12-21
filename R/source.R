@@ -20,10 +20,10 @@ import_source_package <- function(targz_file, cran_root) {
         package_ext(targz_file) == "tar.gz"
     )
 
-    # TODO: Don't check
-    if (isFALSE(fs::dir_exists(source_package_dir(cran_root))))
-        fs::dir_create(source_package_dir(cran_root))
+    source_dir <- source_package_dir(cran_root)
+    if (isFALSE(fs::dir_exists(source_dir)))
+        fs::dir_create(source_dir)
 
     # TODO: copy or move?
-    fs::file_copy(targz_file, source_package_dir(cran_root))
+    fs::file_copy(targz_file, source_dir)
 }
