@@ -1,6 +1,6 @@
 # Setup ---------------------------------------------------------------------------------------
 
-cran_root <- make_demo_cran(packages = package_paths)
+cran_root <- make_demo_cran(packages = package_paths, distro = "my_linux")
 
 cran_port <- servr::random_port()
 cran_url <- paste0("http://localhost:", cran_port)
