@@ -82,6 +82,39 @@ With R 4.0.x on Windows the content of `cran_root` looks like this:
         \-- PACKAGES.rds
 ```
 
+With R 4.0.2 on Ubuntu 20.04 the content of `cran_root` looks like this (the value of the `distro` argument is an example):
+
+```
+> cran_root <- cranitor::make_demo_cran(cran_root = fs::path_temp("cran"), binary = TRUE, distro = "ubuntu/focal")
+> fs::dir_tree(cran_root)
+├── __linux__
+│   └── ubuntu
+│       └── focal
+│           └── 4.0.2
+│               └── src
+│                   └── contrib
+│                       ├── PACKAGES
+│                       ├── PACKAGES.gz
+│                       ├── PACKAGES.rds
+│                       ├── bar_0.0.1_R_x86_64-pc-linux-gnu.tar.gz
+│                       └── foo_0.0.2_R_x86_64-pc-linux-gnu.tar.gz
+└── src
+    └── contrib
+        ├── Archive
+        │   └── foo
+        │       └── foo_0.0.1.tar.gz
+        ├── Meta
+        │   └── archive.rds
+        ├── PACKAGES
+        ├── PACKAGES.gz
+        ├── PACKAGES.rds
+        ├── bar_0.0.1.tar.gz
+        └── foo_0.0.2.tar.gz
+```
+
+In this example the URL for the binary Linux packages should be `<CRAN URL>/__linux__/ubuntu/focal/4.0.2`.
+When packages are downloaded to **the same Linux distribution** R figures out that the packages are already compiled.
+
 If a CRAN is a mess (I have typically seen unwanted files scattered in different folders), the function `clean_cran` can help out by deleting unexpected files.
 
 
