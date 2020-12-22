@@ -5,7 +5,7 @@ test_that("Import binary package", {
     cran_root <- make_random_demo_cran_path()
     withr::defer(fs::dir_delete(cran_root))
 
-    import_win_package(bin_package_paths["foo_0.0.1"], getRversion(), cran_root)
+    import_win_package(bin_package_paths["foo_0.0.1"], cran_root)
 
     cran_files <- fs::dir_ls(cran_root, type = "file", recurse = TRUE)
     expect_equal(basename(cran_files), basename(bin_package_paths["foo_0.0.1"]))
@@ -16,9 +16,9 @@ test_that("Import the same binary package twice", {
     cran_root <- make_random_demo_cran_path()
     withr::defer(fs::dir_delete(cran_root))
 
-    import_win_package(bin_package_paths["foo_0.0.1"], getRversion(), cran_root)
+    import_win_package(bin_package_paths["foo_0.0.1"], cran_root)
     expect_error(
-        import_win_package(bin_package_paths["foo_0.0.1"], getRversion(), cran_root),
+        import_win_package(bin_package_paths["foo_0.0.1"], cran_root),
         class = "EEXIST"
     )
 })
