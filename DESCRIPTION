@@ -1,6 +1,6 @@
 Package: cranitor
 Title: Janitor for a CRAN
-Version: 0.2.1
+Version: 0.3.0
 Authors@R: person("Robert", "Dahl Jacobsen", role = c("aut", "cre"), email = "git@dahl-jacobsen.dk")
 Description: Taking care of a CRAN from initialization to updating metadata when new 
     packages/package versions are included.
@@ -27,4 +27,4 @@ Suggests:
     testthat (>= 2.1.0),
     utils
 Remotes: 
-    robertdj/pkg.peek
+    robertdj/pkg.peek@v0.2.0

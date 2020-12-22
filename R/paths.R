@@ -3,6 +3,11 @@ source_package_dir <- function(cran_root) {
 }
 
 
+linux_package_dir <- function(r_version, distro, cran_root) {
+    fs::path(cran_root, "__linux__", distro, r_version, "src", "contrib")
+}
+
+
 win_base_package_dir <- function(cran_root) {
     fs::path(cran_root, "bin", "windows", "contrib")
 }

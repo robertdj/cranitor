@@ -27,7 +27,7 @@ test_that("Update CRAN with source package", {
 
     update_cran_source(src_package_paths[1], cran_root)
 
-    # cran_files <- fs::dir_ls(cran_root, type = "file", recurse = TRUE)
+    # Use list.files instead of fs::dir_ls to avoid the full path
     cran_files <- list.files(source_package_dir(cran_root), recursive = TRUE)
 
     # The order of cran_files depend on the OS
@@ -50,7 +50,6 @@ test_that("Update CRAN with new version of source package", {
     f2 <- src_package_paths["foo_0.0.2"]
     update_cran_source(f2, cran_root)
 
-    # cran_files <- fs::dir_ls(cran_root, type = "file", recurse = TRUE)
     cran_files <- list.files(source_package_dir(cran_root), recursive = TRUE)
 
     expect_true(basename(f2) %in% cran_files)

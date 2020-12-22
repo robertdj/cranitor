@@ -6,26 +6,34 @@
 #' created in a temporary folder.
 #' @param binary Only relevant if `packages` is empty. Make binary packages in the demo CRAN? Only
 #' used on Windows and macOS.
+#' @param distro Only relevant on Linux and when `binary` is `TRUE`. An indicative name of the Linux
+#' distribution being used. The only restriction is that it should fit in a URL. As an example,
+#' `ubuntu/focal` is a permitted name.
 #'
 #' @return The folder `cran_root`
 #'
 #' @export
-make_demo_cran <- function(packages = character(0), cran_root = NULL, binary = FALSE) {
+make_demo_cran <- function(packages = character(0), cran_root = NULL, binary = FALSE,
+                           distro = NA_character_) {
     if (is.null(cran_root))
         cran_root <- make_random_demo_cran_path()
 
     assertthat::assert_that(
         is.character(packages),
         assertthat::is.string(cran_root),
+        assertthat::is.string(distro),
         assertthat::is.flag(binary)
     )
+
+    if (binary && is_linux() && is.na(distro))
+        rlang::abort("For binary packages 'distro' must be set")
 
     if (dir.exists(cran_root)) {
         stop(cran_root, " already exists.")
     }
 
     if (length(packages) == 0) {
-        if (isTRUE(binary) && is_win_or_mac()) {
+        if (isTRUE(binary)) {
             binary <- c(TRUE, FALSE)
         } else {
             binary <- FALSE
@@ -40,9 +48,10 @@ make_demo_cran <- function(packages = character(0), cran_root = NULL, binary = F
         )
 
         packages <- purrr::pmap_chr(package_params, create_empty_package, quiet = TRUE)
+        withr::defer(fs::file_delete(packages))
     }
 
-    purrr::walk(packages, update_cran, cran_root = cran_root)
+    purrr::walk(packages, update_cran, cran_root = cran_root, distro = distro)
 
     clean_cran(cran_root)
 
@@ -89,8 +98,8 @@ create_empty_package <- function(package_name, version, ...) {
         "License: MIT",
         "Encoding: UTF-8",
         "LazyData: true"
-        ),
-        con = fs::path(package_path, "DESCRIPTION")
+    ),
+    con = fs::path(package_path, "DESCRIPTION")
     )
 
     pkgbuild::build(path = package_path, ...)
