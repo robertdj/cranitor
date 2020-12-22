@@ -80,33 +80,27 @@ create_empty_package <- function(package_name, version, ...) {
     if (!rlang::is_installed("pkgbuild"))
         rlang::abort("'create_empty_package' requires pkgbuild")
 
-    withr::with_tempdir({
-        fs::dir_create(package_name)
+    package_path <- fs::path_temp(package_name)
+    fs::dir_create(package_path)
+    withr::defer(fs::dir_delete(package_path))
 
-        writeLines(
-            "exportPattern(\"^[^\\\\.]\")",
-            con = fs::path(package_name, "NAMESPACE")
-        )
+    writeLines(
+        "exportPattern(\"^[^\\\\.]\")",
+        con = fs::path(package_path, "NAMESPACE")
+    )
 
-        writeLines(c(
-            paste("Package:", package_name),
-            "Title: Test package for cranitor",
-            paste("Version:", version),
-            "Authors@R: person('First', 'Last', role = c('aut', 'cre'), email = 'first.last@example.com')",
-            "Description: Test package for cranitor.",
-            "License: MIT",
-            "Encoding: UTF-8",
-            "LazyData: true"
-        ),
-        con = fs::path(package_name, "DESCRIPTION")
-        )
+    writeLines(c(
+        paste("Package:", package_name),
+        "Title: Test package for cranitor",
+        paste("Version:", version),
+        "Authors@R: person('First', 'Last', role = c('aut', 'cre'), email = 'first.last@example.com')",
+        "Description: Test package for cranitor.",
+        "License: MIT",
+        "Encoding: UTF-8",
+        "LazyData: true"
+    ),
+    con = fs::path(package_path, "DESCRIPTION")
+    )
 
-        # Using "dest_path = tempdir()" in pkgbuild::build gives the error:
-        # formal argument "dest_path" matched by multiple actual arguments
-        temp_package_location <- pkgbuild::build(path = package_name, ...)
-        package_location <- fs::path_temp(basename(temp_package_location))
-        fs::file_move(temp_package_location, package_location)
-    })
-
-    return(package_location)
+    pkgbuild::build(path = package_path, ...)
 }
