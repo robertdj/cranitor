@@ -54,6 +54,21 @@ The empty packages are created with `create_empty_package`.
 Alternatively, a vector of filenames with paths to package files can be supplied to `make_demo_cran`.
 Package files can be made from a project with `devtools::build` or downloaded from another CRAN.
 
+If a CRAN is a mess (I have typically seen unwanted files scattered in different folders), the function `clean_cran` can help out by deleting unexpected files.
+
+
+# Binary Linux packages
+
+As of version 0.3.0 {cranitor} supports binary Linux packages -- that is, R packages that does not require compilation on the user's computer.
+The approach is inspired by (the demo videos I have seen of) [RStudio's Package Manager](https://rstudio.com/products/package-manager), where each Linux distribution and version of R has a dedicated folder with binary packages.
+
+The format of a binary Linux package is still `tar.gz` like for source packages.
+It is *not* possible to infer which Linux distribution compiled the package, since all Linux distributions are collectively referred to as "unix" in the metadata.
+Therefore, the `update_cran` function needs a `distro` argument for binary Linux packages.
+
+
+# CRAN Content
+
 With R 4.0.x on Windows the content of `cran_root` looks like this:
 
 ```
@@ -96,8 +111,8 @@ With R 4.0.2 on Ubuntu 20.04 the content of `cran_root` looks like this (the val
 │                       ├── PACKAGES
 │                       ├── PACKAGES.gz
 │                       ├── PACKAGES.rds
-│                       ├── bar_0.0.1_R_x86_64-pc-linux-gnu.tar.gz
-│                       └── foo_0.0.2_R_x86_64-pc-linux-gnu.tar.gz
+│                       ├── bar_0.0.1.tar.gz
+│                       └── foo_0.0.2.tar.gz
 └── src
     └── contrib
         ├── Archive
@@ -115,7 +130,8 @@ With R 4.0.2 on Ubuntu 20.04 the content of `cran_root` looks like this (the val
 In this example the URL for the binary Linux packages should be `<CRAN URL>/__linux__/ubuntu/focal/4.0.2`.
 When packages are downloaded to **the same Linux distribution** R figures out that the packages are already compiled.
 
-If a CRAN is a mess (I have typically seen unwanted files scattered in different folders), the function `clean_cran` can help out by deleting unexpected files.
+When making a binary package on Linux the filename typically includes information about the architecture, such as `foo_0.0.1_R_x86_64-pc-linux-gnu.tar.gz`.
+However, R on Linux expects package names to be of the form `<name>_<version>.tar.gz`, so everything else is stripped when importing the package.
 
 
 # macOS
