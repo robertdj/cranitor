@@ -19,6 +19,5 @@ import_source_package <- function(targz_file, cran_root) {
     if (isFALSE(fs::dir_exists(source_dir)))
         fs::dir_create(source_dir)
 
-    # TODO: copy or move?
     fs::file_copy(targz_file, source_dir)
 }

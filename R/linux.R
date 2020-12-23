@@ -1,15 +1,8 @@
 update_cran_linux <- function(targz_file, cran_root, distro) {
     assertthat::assert_that(
         assertthat::is.string(cran_root),
-        fs::is_file(targz_file),
-        package_ext(targz_file) == "tar.gz",
-        assertthat::is.string(distro),
-        pkg.peek::is_package_built(targz_file)
+        assertthat::is.string(distro)
     )
-
-    meta <- pkg.peek::get_package_meta(targz_file)
-    if (tolower(meta$Built$OStype) != "unix")
-        stop(targz_file, " not built on Linux")
 
     r_version <- pkg.peek::get_r_version(targz_file)
     linux_dir <- linux_package_dir(r_version, distro, cran_root)
@@ -24,15 +17,31 @@ update_cran_linux <- function(targz_file, cran_root, distro) {
 
 
 import_linux_package <- function(targz_file, linux_dir) {
-    if (isFALSE(fs::dir_exists(linux_dir)))
-        fs::dir_create(linux_dir)
+    assertthat::assert_that(
+        fs::is_file(targz_file),
+        package_ext(targz_file) == "tar.gz",
+        pkg.peek::is_package_built(targz_file)
+    )
+
+    if (isFALSE(fs::dir_exists(linux_dir))) {
+        path <- tryCatch(
+            fs::dir_create(linux_dir),
+            error = identity
+        )
+
+        if (inherits(path, "identity"))
+            rlang::abort(paste(linux_dir, "is not a valid path"))
+    }
+
+    meta <- pkg.peek::get_package_meta(targz_file)
+    if (tolower(meta$Built$OStype) != "unix")
+        stop(targz_file, " not built on Linux")
 
     pkg_name <- pkg.peek::get_package_name(targz_file)
     pkg_version <- pkg.peek::get_package_version(targz_file)
     imported_name <- paste0(pkg_name, "_", pkg_version, ".tar.gz")
     package_path <- fs::path(linux_dir, imported_name)
 
-    # TODO: copy or move?
     fs::file_copy(targz_file, package_path)
 }
 
