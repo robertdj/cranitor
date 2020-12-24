@@ -52,20 +52,5 @@ archive_linux_packages <- function(linux_dir) {
     package_names <- package_name_from_filename(linux_packages)
     packages_by_name <- split(linux_packages, package_names)
 
-    purrr::walk(packages_by_name, archive_single_linux_package)
-}
-
-
-archive_single_linux_package <- function(package_files) {
-    package_name <- unique(package_name_from_filename(package_files))
-    assertthat::assert_that(
-        assertthat::is.string(package_name)
-    )
-
-    if (length(package_files) <= 1)
-        return(invisible(NULL))
-
-    sorted_packages <- sort_files_by_version(package_files)
-
-    fs::file_delete(sorted_packages[-1])
+    purrr::walk(packages_by_name, archive_single_binary_package)
 }

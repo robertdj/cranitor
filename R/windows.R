@@ -35,20 +35,5 @@ archive_win_packages <- function(r_version, cran_root, list = FALSE) {
     package_names <- package_name_from_filename(win_packages)
     packages_by_name <- split(win_packages, package_names)
 
-    purrr::walk(packages_by_name, archive_single_win_package, cran_root = cran_root)
-}
-
-
-archive_single_win_package <- function(package_files, cran_root) {
-    package_name <- unique(package_name_from_filename(package_files))
-    assertthat::assert_that(
-        assertthat::is.string(package_name)
-    )
-
-    if (length(package_files) <= 1)
-        return(invisible(NULL))
-
-    sorted_packages <- sort_files_by_version(package_files)
-
-    fs::file_delete(sorted_packages[-1])
+    purrr::walk(packages_by_name, archive_single_binary_package, cran_root = cran_root)
 }
