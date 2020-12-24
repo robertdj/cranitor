@@ -1,7 +1,7 @@
 #' Archive outdated versions of a package
 #'
-#' {cranitor} only retains the most recent version of a binary package; older versions are deleted.
-#' If there are multiple elements in `package_files` all but the most recent are deleted.
+#' If there are multiple elements in `package_files` all but the most recent are deleted. Packages
+#' are sorted by their version number.
 #'
 #' @param package_files A vector with filenames.
 archive_single_binary_package <- function(package_files) {
@@ -11,7 +11,7 @@ archive_single_binary_package <- function(package_files) {
     )
 
     if (length(package_files) <= 1)
-        return(invisible(NULL))
+        return(invisible(character(0L)))
 
     sorted_packages <- sort_files_by_version(package_files)
 

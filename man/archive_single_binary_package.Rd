@@ -10,6 +10,6 @@ archive_single_binary_package(package_files)
 \item{package_files}{A vector with filenames.}
 }
 \description{
-{cranitor} only retains the most recent version of a binary package; older versions are deleted.
-If there are multiple elements in \code{package_files} all but the most recent are deleted.
+If there are multiple elements in \code{package_files} all but the most recent are deleted. Packages
+are sorted by their version number.
 }
