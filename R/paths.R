@@ -7,6 +7,15 @@ linux_package_dir <- function(r_version, distro, cran_root) {
     fs::path(cran_root, "__linux__", distro, r_version, "src", "contrib")
 }
 
+is_valid_linux_dir <- function(linux_dir) {
+    TRUE
+}
+
+
+is_valid_windows_dir <- function(win_dir) {
+    TRUE
+}
+
 
 win_base_package_dir <- function(cran_root) {
     fs::path(cran_root, "bin", "windows", "contrib")
