@@ -34,10 +34,11 @@ import_win_package <- function(zip_file, win_dir) {
 
 
 archive_win_packages <- function(win_dir) {
-    win_packages <- fs::dir_ls(win_package_dir(r_version, cran_root), type = "file", glob = "*.zip")
+    win_packages <- fs::dir_ls(win_dir, type = "file", glob = "*.zip")
 
     package_names <- package_name_from_filename(win_packages)
     packages_by_name <- split(win_packages, package_names)
 
-    purrr::walk(packages_by_name, archive_single_binary_package, cran_root = cran_root)
+    purrr::walk(packages_by_name, archive_single_binary_package)
 }
+
