@@ -123,21 +123,6 @@ clean_cran_win_single_version <- function(r_version, cran_root, list = FALSE) {
 }
 
 
-archive_single_win_package <- function(package_files, cran_root) {
-    package_name <- unique(package_name_from_filename(package_files))
-    assertthat::assert_that(
-        assertthat::is.string(package_name)
-    )
-
-    if (length(package_files) <= 1)
-        return(invisible(NULL))
-
-    sorted_packages <- sort_files_by_version(package_files)
-
-    fs::file_delete(sorted_packages[-1])
-}
-
-
 clean_cran_mac <- function(cran_root) {
     if (isFALSE(fs::dir_exists(mac_package_dir(cran_root))))
         message("No source packages in ", cran_root)
