@@ -86,29 +86,6 @@ archive_single_source_package <- function(package_files, cran_root) {
 }
 
 
-sort_files_by_version <- function(package_files) {
-    # TODO: This is also tested in archive_source_single_package
-    filenames_sans_path <- basename(package_files)
-    package_name <- unique(package_name_from_filename(filenames_sans_path))
-
-    if (length(package_name) != 1)
-        stop("sort_files_by_version: Only archives of a single package allowed")
-
-    package_file_pattern <- paste0(
-        "^", package_name,
-        "_(([[:digit:]]{1,}(\\.|_)){3,4}).*(tar\\.gz|tgz|zip)$"
-    )
-
-    version_numbers_plus_dot <- sub(package_file_pattern, "\\1", filenames_sans_path)
-    version_numbers_as_strings <- substr(
-        version_numbers_plus_dot, 1, nchar(version_numbers_plus_dot) - 1
-    )
-    version_numbers <- package_version(version_numbers_as_strings)
-
-    package_files[order(version_numbers, decreasing = TRUE)]
-}
-
-
 clean_cran_win <- function(cran_root, list = FALSE) {
     assertthat::assert_that(assertthat::is.flag(list))
 
@@ -140,24 +117,9 @@ clean_cran_win_single_version <- function(r_version, cran_root, list = FALSE) {
     package_names <- package_name_from_filename(win_packages)
     packages_by_name <- split(win_packages, package_names)
 
-    purrr::walk(packages_by_name, archive_single_win_package, cran_root = cran_root)
+    purrr::walk(packages_by_name, archive_single_binary_package)
 
     tools::write_PACKAGES(win_package_dir(r_version, cran_root), type = "win.binary")
-}
-
-
-archive_single_win_package <- function(package_files, cran_root) {
-    package_name <- unique(package_name_from_filename(package_files))
-    assertthat::assert_that(
-        assertthat::is.string(package_name)
-    )
-
-    if (length(package_files) <= 1)
-        return(invisible(NULL))
-
-    sorted_packages <- sort_files_by_version(package_files)
-
-    fs::file_delete(sorted_packages[-1])
 }
 
 
