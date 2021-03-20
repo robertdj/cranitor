@@ -26,15 +26,18 @@ test_that("Import the same binary package twice", {
 
 
 test_that("Error specifying invalid Linux dir", {
-    expect_error(is_valid_linux_dir("my_linux"), regexp = "must contain folder '__linux__'")
+    is_valid <- expect_message(is_valid_linux_dir("my_linux"), regexp = "must contain folder '__linux__'")
+    expect_false(is_valid)
 
-    expect_error(
+    is_valid <- expect_message(
         is_valid_linux_dir("__linux__/my_linux"), regexp = "must contain a folder with an R version"
     )
+    expect_false(is_valid)
 
-    expect_error(
+    is_valid <- expect_message(
         is_valid_linux_dir("__linux__/my_linux/4.0"), regexp = "must contain a folder with an R version"
     )
+    expect_false(is_valid)
 })
 
 

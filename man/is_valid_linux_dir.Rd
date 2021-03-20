@@ -6,6 +6,12 @@
 \usage{
 is_valid_linux_dir(linux_dir)
 }
+\arguments{
+\item{linux_dir}{Folder to test}
+}
+\value{
+\code{TRUE} or \code{FALSE}. If \code{FALSE} as message is also written.
+}
 \description{
 A folder is considered valid if it contains "\strong{linux}" and a 3 digit R version
 }
