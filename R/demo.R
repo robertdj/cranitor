@@ -18,15 +18,15 @@ make_demo_cran <- function(packages = character(0), cran_root = NULL, binary = F
     if (is.null(cran_root))
         cran_root <- make_random_demo_cran_path()
 
-    if (binary && is_linux() && is.na(distro))
-        rlang::abort("For binary packages 'distro' must be set")
-
     assertthat::assert_that(
         is.character(packages),
         assertthat::is.string(cran_root),
         assertthat::is.string(distro),
         assertthat::is.flag(binary)
     )
+
+    if (binary && is_linux() && is.na(distro))
+        rlang::abort("For binary packages 'distro' must be set")
 
     if (dir.exists(cran_root)) {
         stop(cran_root, " already exists.")

@@ -7,13 +7,31 @@ linux_package_dir <- function(r_version, distro, cran_root) {
     fs::path(cran_root, "__linux__", distro, r_version, "src", "contrib")
 }
 
+
+#' Is folder a valid Linux dir
+#'
+#' A folder is considered valid if it contains "__linux__" and a 3 digit R version
+#'
+#' @param linux_dir Folder to test
+#'
+#' @return `TRUE` or `FALSE`. If `FALSE` as message is also written.
 is_valid_linux_dir <- function(linux_dir) {
-    TRUE
-}
+    strsplit(linux_dir, split = "/", fixed = TRUE)
+    file_parts <- strsplit(linux_dir, split = "/", fixed = TRUE)[[1]]
 
+    linux_dir_base <- which("__linux__" == file_parts)
+    if (length(linux_dir_base) != 1) {
+        message(linux_dir, " must contain folder '__linux__'")
+        return(FALSE)
+    }
 
-is_valid_windows_dir <- function(win_dir) {
-    TRUE
+    version_dir <- which(grepl("^[[:digit:]]\\.[[:digit:]]\\.[[:digit:]]$", file_parts))
+    if (length(version_dir) != 1) {
+        message(linux_dir, " must contain a folder with an R version")
+        return(FALSE)
+    }
+
+    return(TRUE)
 }
 
 
