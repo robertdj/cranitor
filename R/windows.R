@@ -18,8 +18,7 @@ import_win_package <- function(zip_file, win_dir) {
     assertthat::assert_that(
         fs::is_file(zip_file),
         assertthat::has_extension(zip_file, "zip"),
-        pkg.peek::is_package_built(zip_file),
-        is_valid_windows_dir(win_dir)
+        pkg.peek::is_package_built(zip_file)
     )
 
     meta <- pkg.peek::get_package_meta(zip_file)

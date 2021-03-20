@@ -25,6 +25,19 @@ test_that("Import the same binary package twice", {
 })
 
 
+test_that("Error specifying invalid Linux dir", {
+    expect_error(is_valid_linux_dir("my_linux"), regexp = "must contain folder '__linux__'")
+
+    expect_error(
+        is_valid_linux_dir("__linux__/my_linux"), regexp = "must contain a folder with an R version"
+    )
+
+    expect_error(
+        is_valid_linux_dir("__linux__/my_linux/4.0"), regexp = "must contain a folder with an R version"
+    )
+})
+
+
 test_that("Update CRAN with binary package", {
     cran_root <- make_random_demo_cran_path()
     linux_dir <- linux_package_dir(getRversion(), distro = "my_linux", cran_root)
